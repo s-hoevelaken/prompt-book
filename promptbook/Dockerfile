@@ -1,42 +1,31 @@
-# Use the official PHP image as a base image
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /app
 
-# Install system dependencies including those needed for common extensions
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    libwebp-dev \
-    zlib1g-dev \
-    libxml2-dev \
-    libicu-dev \
-    libzip-dev \
-    libssl-dev \
-    libcurl4-openssl-dev \
-    locales \
-    zip \
-    git \
     curl \
+    git \
+    unzip \
+    libzip-dev \
+    libpq-dev \
+    && docker-php-ext-install zip pdo_mysql \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath
-
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copy application files
-COPY . /var/www
+# Copy composer files
+COPY composer.json composer.lock ./
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www
+# Run Composer install with flags
+RUN composer install --no-scripts --no-autoloader --no-interaction
 
-# Expose port 9000
-EXPOSE 9000
+# Copy the rest of the application code
+COPY . .
 
-CMD ["php-fpm"]
+ENV PORT=8000
+
+# Command to run the application
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
