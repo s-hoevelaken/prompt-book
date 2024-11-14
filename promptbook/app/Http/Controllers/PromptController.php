@@ -24,4 +24,25 @@ class PromptController extends Controller
 
         return redirect()->route('dashboard');
     }
+
+    public function myPrompts()
+    {
+        $prompts = Prompt::where('user_id', Auth::id())
+                         ->orderBy('created_at', 'desc')
+                         ->with('user')
+                         ->paginate(10);
+
+        return response()->json($prompts);
+    }
+
+    public function allPrompts()
+    {
+        $prompts = Prompt::where('is_public', 1)
+                         ->where('user_id', '!=', Auth::id())
+                         ->orderBy('created_at', 'desc')
+                         ->with('user')
+                         ->paginate(10);
+
+        return response()->json($prompts);
+    }
 }
