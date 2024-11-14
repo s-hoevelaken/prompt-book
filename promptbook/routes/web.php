@@ -1,14 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Dashboard;
+use App\Livewire\Homepage;
 
 Route::view('/', 'welcome');
 
 
-Route::get('dashboard', Dashboard::class)
+Route::get('homepage', Homepage::class)
     ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    ->name('homepage');
 
 
 
