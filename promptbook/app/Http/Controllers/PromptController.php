@@ -45,4 +45,21 @@ class PromptController extends Controller
 
         return response()->json($prompts);
     }
+
+    public function togglePublicity($id)
+    {
+        $prompt = Prompt::where('id', $id)->where('user_id', Auth::id())->first();
+
+        if (!$prompt) {
+            return response()->json(['error' => 'Prompt not found or access denied.'], 404);
+        }
+
+        $prompt->is_public = !$prompt->is_public;
+        $prompt->save();
+
+        return response()->json([
+            'message' => 'Prompt publicity status updated successfully.',
+            'is_public' => $prompt->is_public
+        ]);
+    }
 }

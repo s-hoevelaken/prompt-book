@@ -23,9 +23,11 @@ Route::get('/testing', function () {
     return view('create-prompt-test-page');
 });
 
+Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity'])->middleware('auth');
+
 Route::view('/testing-prompt-retrieval', 'testing-prompt-retrieval');
     
-Route::post('/prompts', [PromptController::class, 'store'])->middleware(['auth']);
+Route::post('/prompts', [PromptController::class, 'store'])->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/prompts/my-prompts', [PromptController::class, 'myPrompts']);

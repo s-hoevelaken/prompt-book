@@ -24,6 +24,7 @@
     <script>
         let myPromptsPage = 1;
         let allPromptsPage = 1;
+        const authenticatedUserId = {{ Auth::id() }};
 
         async function fetchPrompts(url, containerId, page, initialLoad = false) {
             try {
@@ -33,11 +34,9 @@
                 }
                 const data = await response.json();
                 displayPrompts(data.data, containerId);
-
                 if (initialLoad && data.data.length === 0) {
                     document.getElementById(`load-more-${containerId}`).style.display = 'none';
                 }
-
                 return data.next_page_url ? true : false;
             } catch (error) {
                 console.error(error);
@@ -57,9 +56,34 @@
                     <p><strong>Content:</strong> ${prompt.content}</p>
                     <p><strong>Uploaded by:</strong> ${prompt.user ? prompt.user.name : 'Unknown'}</p>
                     <p><strong>Public:</strong> ${prompt.is_public ? 'Yes' : 'No'}</p>
+                    ${prompt.user_id === authenticatedUserId ? `
+                        <button onclick="togglePublicity(${prompt.id})">Toggle Publicity</button>
+                    ` : ''}
                 `;
                 container.appendChild(promptDiv);
             });
+        }
+
+        async function togglePublicity(promptId) {
+            try {
+                const response = await fetch(`/prompts/${promptId}/toggle-publicity`, {
+                    method: 'PUT',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to toggle publicity');
+                }
+
+                const data = await response.json();
+                alert(data.message);
+            } catch (error) {
+                console.error(error);
+                alert('Error toggling publicity.');
+            }
         }
 
         async function loadMorePrompts(url, containerId) {
