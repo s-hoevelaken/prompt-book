@@ -2,5 +2,17 @@
     font-family: "Roboto", sans-serif;
     font-weight: 500;
     font-style: normal;
-  }
+}
   
+
+.dissapear {
+    display: none;
+}
+
+nav {
+    transition: transform 0.3s ease-in-out;
+}
+
+nav.disappear {
+    transform: translateY(-100%);
+}

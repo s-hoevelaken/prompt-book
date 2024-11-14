@@ -14,9 +14,9 @@
 
         <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@100&display=swap" rel="stylesheet">
 
-
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/navbar.js'])
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('resources/css/style.css') }}">
