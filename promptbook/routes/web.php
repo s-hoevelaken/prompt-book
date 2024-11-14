@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Homepage;
 use App\Http\Controllers\PromptController;
 use App\Livewire\Dashboard;
 
@@ -8,9 +9,9 @@ use App\Livewire\Dashboard;
 Route::view('/', 'welcome');
 
 
-Route::get('dashboard', Dashboard::class)
+Route::get('homepage', Homepage::class)
     ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    ->name('homepage');
 
 
 

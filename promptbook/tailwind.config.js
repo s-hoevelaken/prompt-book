@@ -11,10 +11,16 @@ export default {
 
     theme: {
         extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
-        },
+                fontFamily: {
+                    sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                },
+
+                fontWeight: {
+                    // make text extra thin
+                    extraThin: 100,
+                }
+                
+            }
     },
 
     plugins: [forms],
