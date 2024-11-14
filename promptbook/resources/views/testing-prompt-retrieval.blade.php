@@ -47,58 +47,106 @@
 
         function displayPrompts(prompts, containerId) {
             const container = document.getElementById(containerId);
+            container.innerHTML = ''; // Clear existing prompts
             prompts.forEach(prompt => {
                 const promptDiv = document.createElement('div');
                 promptDiv.className = 'prompt';
                 promptDiv.innerHTML = `
-                    <h3>${prompt.title}</h3>
-                    <p><strong>Description:</strong> ${prompt.description || 'No description'}</p>
-                    <p><strong>Content:</strong> ${prompt.content}</p>
-                    <p><strong>Uploaded by:</strong> ${prompt.user ? prompt.user.name : 'Unknown'}</p>
-                    <p><strong>Public:</strong> ${prompt.is_public ? 'Yes' : 'No'}</p>
-                    ${prompt.user_id === authenticatedUserId ? `
-                        <button onclick="togglePublicity(${prompt.id})">Toggle Publicity</button>
-                    ` : ''}
+                    <div id="prompt-${prompt.id}">
+                        <h3>${prompt.title}</h3>
+                        <p><strong>Description:</strong> ${prompt.description || 'No description'}</p>
+                        <p><strong>Content:</strong> ${prompt.content}</p>
+                        <p><strong>Uploaded by:</strong> ${prompt.user ? prompt.user.name : 'Unknown'}</p>
+                        <p><strong>Public:</strong> ${prompt.is_public ? 'Yes' : 'No'}</p>
+                        ${prompt.user_id === authenticatedUserId ? `
+                            <button onclick="togglePublicity(${prompt.id})">Toggle Publicity</button>
+                            <button onclick="deletePrompt(${prompt.id}, '${containerId}')">Delete</button>
+                            <button onclick="editPrompt(${prompt.id})" id="edit-button-${prompt.id}">Edit</button>
+                        ` : ''}
+                    </div>
                 `;
                 container.appendChild(promptDiv);
             });
         }
 
-        async function togglePublicity(promptId) {
+        async function editPrompt(promptId) {
+            const promptContainer = document.getElementById(`prompt-${promptId}`);
+            const editButton = document.getElementById(`edit-button-${promptId}`);
+            
+            // Check if we are in edit mode
+            if (editButton.innerText === 'Edit') {
+                // Change fields to input elements with current values
+                const title = promptContainer.querySelector('h3').innerText;
+                const description = promptContainer.querySelector('p:nth-of-type(1)').innerText.replace('Description: ', '');
+                const content = promptContainer.querySelector('p:nth-of-type(2)').innerText.replace('Content: ', '');
+                
+                promptContainer.innerHTML = `
+                    <input type="text" id="edit-title-${promptId}" value="${title}" /><br>
+                    <textarea id="edit-description-${promptId}">${description}</textarea><br>
+                    <textarea id="edit-content-${promptId}">${content}</textarea><br>
+                    <button onclick="savePrompt(${promptId})">Save</button>
+                    <button onclick="cancelEdit(${promptId})">Cancel</button>
+                `;
+            }
+        }
+
+        async function savePrompt(promptId) {
+            const title = document.getElementById(`edit-title-${promptId}`).value;
+            const description = document.getElementById(`edit-description-${promptId}`).value;
+            const content = document.getElementById(`edit-content-${promptId}`).value;
+
             try {
-                const response = await fetch(`/prompts/${promptId}/toggle-publicity`, {
+                const response = await fetch(`/prompts/${promptId}`, {
                     method: 'PUT',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title, description, content })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to save prompt');
+                }
+
+                const data = await response.json();
+                alert(data.message);
+                
+                // Reload the prompts after saving
+                fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
+            } catch (error) {
+                console.error(error);
+                alert('Error saving prompt.');
+            }
+        }
+
+        function cancelEdit(promptId) {
+            fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
+        }
+
+        async function deletePrompt(promptId, containerId) {
+            if (!confirm('Are you sure you want to delete this prompt?')) return;
+
+            try {
+                const response = await fetch(`/prompts/${promptId}`, {
+                    method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         'Content-Type': 'application/json'
                     }
                 });
-                
+
                 if (!response.ok) {
-                    throw new Error('Failed to toggle publicity');
+                    throw new Error('Failed to delete prompt');
                 }
 
                 const data = await response.json();
                 alert(data.message);
+
+                fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
             } catch (error) {
                 console.error(error);
-                alert('Error toggling publicity.');
-            }
-        }
-
-        async function loadMorePrompts(url, containerId) {
-            if (containerId === 'my-prompts') {
-                myPromptsPage++;
-                const moreData = await fetchPrompts(url, containerId, myPromptsPage);
-                if (!moreData) {
-                    document.getElementById('load-more-my-prompts').style.display = 'none';
-                }
-            } else if (containerId === 'all-prompts') {
-                allPromptsPage++;
-                const moreData = await fetchPrompts(url, containerId, allPromptsPage);
-                if (!moreData) {
-                    document.getElementById('load-more-all-prompts').style.display = 'none';
-                }
+                alert('Error deleting prompt.');
             }
         }
 
