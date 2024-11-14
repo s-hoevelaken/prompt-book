@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('title');
             $table->text('description')->nullable();
             $table->text('content');
-            $table->boolean('is_public')->default(false);
+            $table->interger('is_public')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
