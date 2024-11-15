@@ -16,7 +16,9 @@ new class extends Component
     }
 }; ?>
 
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800">
+<nav 
+     :class="{ 'hidden': !visible }" 
+     class="sticky top-0 bg-white dark:bg-gray-800 transition-transform duration-300 z-[5] border-[2px] border-black">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-[4.5rem]">

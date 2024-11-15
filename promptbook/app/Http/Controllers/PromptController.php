@@ -22,7 +22,7 @@ class PromptController extends Controller
             'is_public' => $validatedData['is_public']
         ]);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('homepage');
     }
 
     public function myPrompts()
