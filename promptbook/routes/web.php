@@ -17,7 +17,7 @@ Route::get('/testing', function () {
     return view('create-prompt-test-page');
 });
 
-Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity'])->middleware('auth');
+Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity'])->middleware(['auth']);
 
 Route::view('/testing-prompt-retrieval', 'testing-prompt-retrieval');
     
@@ -30,6 +30,8 @@ Route::put('/prompts/{id}', [PromptController::class, 'update'])->middleware('au
 Route::middleware('auth')->group(function () {
     Route::get('/prompts/my-prompts', [PromptController::class, 'myPrompts']);
     Route::get('/prompts/all-prompts', [PromptController::class, 'allPrompts']);
+    Route::post('/prompts/{id}/like', [PromptController::class, 'toggleLike']);
+    Route::post('/prompts/{id}/save', [PromptController::class, 'toggleFavorite']);
 });
 
 require __DIR__ . '/auth.php';
