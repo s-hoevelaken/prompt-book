@@ -29,6 +29,10 @@ Route::view('/testing-prompt-retrieval', 'testing-prompt-retrieval');
     
 Route::post('/prompts', [PromptController::class, 'store'])->middleware('auth');
 
+Route::delete('/prompts/{id}', [PromptController::class, 'destroy'])->middleware('auth');
+
+Route::put('/prompts/{id}', [PromptController::class, 'update'])->middleware('auth');
+
 Route::middleware('auth')->group(function () {
     Route::get('/prompts/my-prompts', [PromptController::class, 'myPrompts']);
     Route::get('/prompts/all-prompts', [PromptController::class, 'allPrompts']);
