@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Prompt;
+use App\Models\Like;
+use App\Models\Favorite;
 use App\Http\Requests\StorePromptRequest;
 use App\Http\Requests\EditPromptRequest;
 use Illuminate\Support\Facades\Log;
@@ -11,6 +13,42 @@ use Illuminate\Support\Facades\Auth;
 
 class PromptController extends Controller
 {
+    public function toggleLike($id)
+    {
+        $user = Auth::id();
+
+        $like = Like::where('prompt_id', $id)->where('user_id', $user)->first();
+
+        if ($like) {
+            $like->delete();
+            return response()->json(['message' => 'Prompt unliked successfully.']);
+        } else {
+            Like::create([
+                'prompt_id' => $id,
+                'user_id' => $user,
+            ]);
+            return response()->json(['message' => 'Prompt liked successfully.']);
+        }
+    }
+
+    public function toggleFavorite($id)
+    {
+        $user = Auth::id();
+
+        $favorite = Favorite::where('prompt_id', $id)->where('user_id', $user)->first();
+
+        if ($favorite) {
+            $favorite->delete();
+            return response()->json(['message' => 'Prompt removed from favorites.']);
+        } else {
+            Favorite::create([
+                'prompt_id' => $id,
+                'user_id' => $user,
+            ]);
+            return response()->json(['message' => 'Prompt added to favorites.']);
+        }
+    }
+
     public function store(StorePromptRequest $request)
     {
         $validatedData = $request->validated();
@@ -28,24 +66,41 @@ class PromptController extends Controller
 
     public function myPrompts()
     {
-        $prompts = Prompt::where('user_id', Auth::id())
-                         ->orderBy('created_at', 'desc')
-                         ->with('user')
-                         ->paginate(10);
+        $prompts = Prompt::with(['user', 'likes', 'favorites'])
+                     ->where('user_id', Auth::id())
+                     ->orderBy('created_at', 'desc')
+                     ->paginate(10);
+
+        $prompts->getCollection()->transform(function ($prompt) {
+            $prompt->liked = $prompt->likes->contains('user_id', Auth::id());
+            $prompt->favorited = $prompt->favorites->contains('user_id', Auth::id());
+            unset($prompt->likes);
+            unset($prompt->favorites);
+            return $prompt;
+        });
 
         return response()->json($prompts);
     }
 
     public function allPrompts()
     {
-        $prompts = Prompt::where('is_public', 1)
-                         ->where('user_id', '!=', Auth::id())
-                         ->orderBy('created_at', 'desc')
-                         ->with('user')
-                         ->paginate(10);
+        $prompts = Prompt::with(['user', 'likes', 'favorites'])
+                     ->where('is_public', 1)
+                     ->where('user_id', '!=', Auth::id())
+                     ->orderBy('created_at', 'desc')
+                     ->paginate(10);
+
+        $prompts->getCollection()->transform(function ($prompt) {
+            $prompt->liked = $prompt->likes->contains('user_id', Auth::id());
+            $prompt->favorited = $prompt->favorites->contains('user_id', Auth::id());
+            unset($prompt->likes);
+            unset($prompt->favorites);
+            return $prompt;
+        });
 
         return response()->json($prompts);
     }
+
 
     public function togglePublicity($id)
     {
@@ -64,7 +119,7 @@ class PromptController extends Controller
             'is_public' => $prompt->is_public
         ]);
     }
-
+    
     public function destroy($id)
     {
         $prompt = Prompt::where('id', $id)->where('user_id', Auth::id())->first();

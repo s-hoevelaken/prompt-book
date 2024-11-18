@@ -9,6 +9,23 @@
             border: 1px solid #ddd;
             padding: 10px;
             margin-bottom: 10px;
+            position: relative;
+        }
+        .dropdown {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 5px;
+            z-index: 1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
     </style>
 </head>
@@ -47,7 +64,7 @@
 
         function displayPrompts(prompts, containerId) {
             const container = document.getElementById(containerId);
-            container.innerHTML = ''; // Clear existing prompts
+            container.innerHTML = '';
             prompts.forEach(prompt => {
                 const promptDiv = document.createElement('div');
                 promptDiv.className = 'prompt';
@@ -58,24 +75,56 @@
                         <p><strong>Content:</strong> ${prompt.content}</p>
                         <p><strong>Uploaded by:</strong> ${prompt.user ? prompt.user.name : 'Unknown'}</p>
                         <p><strong>Public:</strong> ${prompt.is_public ? 'Yes' : 'No'}</p>
-                        ${prompt.user_id === authenticatedUserId ? `
-                            <button onclick="togglePublicity(${prompt.id})">Toggle Publicity</button>
-                            <button onclick="deletePrompt(${prompt.id}, '${containerId}')">Delete</button>
-                            <button onclick="editPrompt(${prompt.id})" id="edit-button-${prompt.id}">Edit</button>
-                        ` : ''}
+                        <div class="dropdown">
+                            <button>Options</button>
+                            <div class="dropdown-content">
+                            <button id="like-button-${prompt.id}" onclick="likePrompt(${prompt.id})">
+                                    ${prompt.liked ? 'Unlike' : 'Like'}
+                                </button>
+                                <button id="favorite-button-${prompt.id}" onclick="favoritePrompt(${prompt.id})">
+                                    ${prompt.favorited ? 'Unfavorite' : 'Favorite'}
+                                </button>
+                                ${prompt.user_id === authenticatedUserId ? `
+                                    <button onclick="togglePublicity(${prompt.id})">Toggle Publicity</button>
+                                    <button id='edit-button-${prompt.id}' onclick="editPrompt(${prompt.id})">Edit</button>
+                                    <button onclick="deletePrompt(${prompt.id}, '${containerId}')">Delete</button>
+                                ` : ''}
+                            </div>
+                        </div>
                     </div>
                 `;
                 container.appendChild(promptDiv);
             });
         }
 
+        async function likePrompt(promptId) {
+            try {
+                const response = await fetch(`/prompts/${promptId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to like prompt');
+                }
+
+                const data = await response.json();
+                alert(data.message);
+            } catch (error) {
+                console.error(error);
+                alert('Error liking prompt.');
+            }
+        }
+        
+
         async function editPrompt(promptId) {
             const promptContainer = document.getElementById(`prompt-${promptId}`);
             const editButton = document.getElementById(`edit-button-${promptId}`);
             
-            // Check if we are in edit mode
             if (editButton.innerText === 'Edit') {
-                // Change fields to input elements with current values
                 const title = promptContainer.querySelector('h3').innerText;
                 const description = promptContainer.querySelector('p:nth-of-type(1)').innerText.replace('Description: ', '');
                 const content = promptContainer.querySelector('p:nth-of-type(2)').innerText.replace('Content: ', '');
@@ -84,44 +133,89 @@
                     <input type="text" id="edit-title-${promptId}" value="${title}" /><br>
                     <textarea id="edit-description-${promptId}">${description}</textarea><br>
                     <textarea id="edit-content-${promptId}">${content}</textarea><br>
-                    <button onclick="savePrompt(${promptId})">Save</button>
+                    <button onclick="submitEditedPrompt(${promptId})">Save</button>
                     <button onclick="cancelEdit(${promptId})">Cancel</button>
                 `;
             }
         }
 
-        async function savePrompt(promptId) {
-            const title = document.getElementById(`edit-title-${promptId}`).value;
-            const description = document.getElementById(`edit-description-${promptId}`).value;
-            const content = document.getElementById(`edit-content-${promptId}`).value;
+async function submitEditedPrompt(promptId) {
+    const title = document.getElementById(`edit-title-${promptId}`).value;
+    const description = document.getElementById(`edit-description-${promptId}`).value;
+    const content = document.getElementById(`edit-content-${promptId}`).value;
 
+    console.log('Attempting to save prompt:', { title, description, content });
+    try {
+        const response = await fetch(`/prompts/${promptId}`, {
+            method: 'PUT',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ title, description, content })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to save prompt');
+        }
+
+        const data = await response.json();
+        alert(data.message);
+
+        fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
+    } catch (error) {
+        console.error(error);
+        alert('Error saving prompt.');
+    }
+}
+
+async function favoritePrompt(promptId) {
+    try {
+        const response = await fetch(`/prompts/${promptId}/save`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to favorite prompt');
+        }
+
+        const data = await response.json();
+        alert(data.message);
+    } catch (error) {
+        console.error(error);
+        alert('Error favoriting prompt.');
+    }
+}
+
+function cancelEdit(promptId) {
+    fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
+}
+
+
+        async function togglePublicity(promptId) {
             try {
-                const response = await fetch(`/prompts/${promptId}`, {
+                const response = await fetch(`/prompts/${promptId}/toggle-publicity`, {
                     method: 'PUT',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ title, description, content })
+                    }
                 });
-
+                
                 if (!response.ok) {
-                    throw new Error('Failed to save prompt');
+                    throw new Error('Failed to toggle publicity');
                 }
 
                 const data = await response.json();
                 alert(data.message);
-                
-                // Reload the prompts after saving
-                fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
             } catch (error) {
                 console.error(error);
-                alert('Error saving prompt.');
+                alert('Error toggling publicity.');
             }
-        }
-
-        function cancelEdit(promptId) {
-            fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
         }
 
         async function deletePrompt(promptId, containerId) {
