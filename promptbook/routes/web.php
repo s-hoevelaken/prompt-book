@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Homepage;
 use App\Http\Controllers\PromptController;
 use App\Livewire\Dashboard;
+
+use App\Livewire\Homepage;
+use App\Livewire\Creationpage;
 
 
 Route::view('/', 'welcome');
@@ -19,9 +21,9 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-Route::get('/testing', function () {
-    return view('create-prompt-test-page');
-});
+Route::get('creationpage', Creationpage::class)
+    ->middleware(['auth'])
+    ->name('prompts.create');
 
 Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity'])->middleware(['auth']);
 
