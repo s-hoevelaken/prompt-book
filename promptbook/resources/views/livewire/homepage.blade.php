@@ -20,51 +20,79 @@
             </div>
         </section>
 
-        <section class="relative bg-cover bg-center w-full h-[110dvh]" style="background-image: url('https://img.freepik.com/premium-photo/laptop-with-many-books-inside-symbolizing_912787-489.jpg'); background-size: cover; background-repeat: no-repeat;">
+        <section class="relative bg-cover bg-center w-full h-[100dvh]" style="background-image: url('https://img.freepik.com/premium-photo/laptop-with-many-books-inside-symbolizing_912787-489.jpg'); background-size: cover; background-repeat: no-repeat;">
             <div class="absolute inset-0 bg-gradient-to-r opacity-70 from-gray-800 via-[#0e3086cc] to-[#7c72a7cc] z-2"></div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 place-items-center place-content-center w-[90%] mx-auto h-full z-10">
-                <div class="grid grid-cols-1 grid-rows-3 grid-flow-col place-content-center items-center text-center bg-white rounded-lg shadow-lg w-3/4">
-                    <div class="font-bold text-lg">
-                        <h1>
-                            Create Prompt
-                        </h1>
+                <div class="grid grid-cols-1 grid-rows-3 grid-flow-col place-content-center items-center text-center bg-white bg-opacity-95 rounded-md shadow-lg sm:h-60 h-full w-3/4 sm:py-4 py-7 hover:scale-[1.025] hover:bg-opacity-95 transition-all duration-300 ease-in-out">
+                    <div class="font-bold text-lg h-full relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <h1 class="absolute sm:top-1 top-[-1rem] font-bold font-mono right-5 text-[1.1rem] max-w-56 w-fit truncate whitespace-nowrap">Create your own prompt</h1>
+                            <div class="absolute left-0 right-0 h-[1px] bg-gray-900 bg-opacity-30"></div>
+                            
+                            <div class="w-[50px] h-[50px] bg-gradient-to-r from-sky-700 to-green-600 rounded-full flex items-center justify-center shadow-md absolute left-8">
+                                <img class="object-contain w-[65%] h-[65%]" src="{{ asset('assets/svg/add-icon.svg') }}" alt="create-icon">
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-sm border-t-2 border-gray-400 row-span-1 p-2">
-                        <p>
-                            Generate creative prompts with ease for any project.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 grid-rows-3 grid-flow-col place-content-center items-center text-center bg-white rounded-lg shadow-lg h-auto w-3/4">
-                    <div class="font-bold text-lg">
-                        <h1>
-                            View Prompts
-                        </h1>
-                    </div>
-                    <div class="text-sm border-t-2 border-gray-400 row-span-1 p-2">
-                        <p>
-                            Generate creative prompts with ease for any project.
-                        </p>
+                    
+                    <div class="text-sm px-5 flex flex-col h-1/2 gap-9">
+                        <h2 class="text-start text-[1rem]">You can make your own prompts and view them or share them with others</h2>
+                        <div class="flex flex-row items-center justify-start w-[30%] gap-0 transform hover:translate-x-2 transition-all duration-300 ease-in-out text-[1.1rem]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
+                              </svg>
+                            <button class="hover:cursor-pointer p-2 text-black mt-auto rounded-md py-2 px-1">Go to</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 place-content-center grid-rows-3 grid-flow-col items-center text-center bg-white rounded-lg shadow-lg h-auto w-3/4">
-                    <div class="font-bold text-lg">
-                        <h1>
-                            Feed Prompts
-                        </h1>
+                <div class="grid grid-cols-1 grid-rows-3 grid-flow-col place-content-center items-center text-center bg-white bg-opacity-85 rounded-md shadow-lg sm:h-60 h-full w-3/4 sm:py-4 py-7 hover:scale-[1.025] hover:bg-opacity-95 transition-all duration-300 ease-in-out">
+                    <div class="font-bold text-lg h-full relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <h1 class="absolute sm:top-1 top-[-1rem] font-bold font-mono right-5 text-[1.1rem] max-w-56 w-fit truncate whitespace-nowrap">View your own prompts</h1>
+                            <div class="absolute left-0 right-0 h-[1px] bg-gray-900 bg-opacity-30"></div>
+                            
+                            <div class="w-[50px] h-[50px] bg-gradient-to-r from-red-700 to-orange-600 rounded-full flex items-center justify-center shadow-md absolute left-8">
+                                <img class="object-contain w-[65%] h-[65%]" src="{{ asset('assets/svg/view-prompts-icon.svg') }}" alt="create-icon">
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-sm border-t-2 border-gray-400 row-span-1 p-2">
-                        <p>
-                            Generate creative prompts with ease for any project.
-                        </p>
+                    
+                    <div class="text-sm px-5 flex flex-col h-1/2 gap-9">
+                        <h2 class="text-start text-[1rem]">Here you can view or modify your own prompts to your liking</h2>
+                        <div class="flex flex-row items-center justify-start w-[30%] gap-0 transform hover:translate-x-2 transition-all duration-300 ease-in-out text-[1.1rem]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
+                              </svg>
+                            <button class="hover:cursor-pointer p-2 text-black mt-auto rounded-md py-2 px-1">Go to</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 grid-rows-3 grid-flow-col place-content-center items-center text-center bg-white bg-opacity-85 rounded-md shadow-lg sm:h-60 h-full w-3/4 sm:py-4 py-7 hover:scale-[1.025] hover:bg-opacity-95 transition-all duration-300 ease-in-out">
+                    <div class="font-bold text-lg h-full relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <h1 class="absolute sm:top-1 top-[-1rem] font-bold font-mono right-5 text-[1.1rem] max-w-56 w-fit truncate whitespace-nowrap">Visit peoples prompts</h1>
+                            <div class="absolute left-0 right-0 h-[1px] bg-gray-900 bg-opacity-30"></div>
+                            
+                            <div class="w-[50px] h-[50px] bg-gradient-to-r from-yellow-600 to-lime-400 rounded-full flex items-center justify-center shadow-md absolute left-8">
+                                <img class="object-contain w-[65%] h-[65%]" src="{{ asset('assets/svg/team-icon.svg') }}" alt="create-icon">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-sm px-5 flex flex-col h-1/2 gap-9">
+                        <h2 class="text-start text-[1rem]">View other peoples prompts and take inspiration from them in the feed</h2>
+                        <div class="flex flex-row items-center justify-start w-[30%] gap-0 transform hover:translate-x-2 transition-all duration-300 ease-in-out text-[1.1rem]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
+                              </svg>
+                            <button class="hover:cursor-pointer text-black mt-auto rounded-md py-2 px-1">Go to</button>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            
         </section>
         
         
