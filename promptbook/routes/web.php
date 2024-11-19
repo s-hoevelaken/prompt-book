@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Homepage;
 use App\Http\Controllers\PromptController;
 use App\Livewire\Dashboard;
+
+use App\Livewire\Homepage;
+use App\Livewire\Creationpage;
 
 
 Route::view('/', 'welcome');
@@ -19,15 +21,17 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-Route::get('/testing', function () {
-    return view('create-prompt-test-page');
-});
+Route::get('creationpage', Creationpage::class)
+    ->middleware(['auth'])
+    ->name('prompts.create');
 
 Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity'])->middleware(['auth']);
 
 Route::view('/testing-prompt-retrieval', 'testing-prompt-retrieval');
     
-Route::post('/prompts', [PromptController::class, 'store'])->middleware('auth');
+Route::post('/prompts', [PromptController::class, 'store'])
+->middleware('auth')
+->name('prompts.store');
 
 Route::delete('/prompts/{id}', [PromptController::class, 'destroy'])->middleware('auth');
 
