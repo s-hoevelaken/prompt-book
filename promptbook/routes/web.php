@@ -29,7 +29,9 @@ Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePu
 
 Route::view('/testing-prompt-retrieval', 'testing-prompt-retrieval');
     
-Route::post('/prompts', [PromptController::class, 'store'])->middleware('auth');
+Route::post('/prompts', [PromptController::class, 'store'])
+->middleware('auth')
+->name('prompts.store');
 
 Route::delete('/prompts/{id}', [PromptController::class, 'destroy'])->middleware('auth');
 

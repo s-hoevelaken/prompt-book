@@ -1,30 +1,48 @@
-<main class="h-5/6 max-w-[85%] mx-auto my-12">
-    <section class="bg-sky-700 bg-opacity-80 backdrop-blur-sm rounded-2xl w-full h-[35rem] shadow-lg shadow-black grid grid-cols-5 grid-rows-1 gap-3 place-content-center place-items-center p-6 sm:max-w-[70%] mx-auto mt-8 text-black">
-        <section class="w-full col-span-3 text black h-[85%] px-6">
-            <div class="grid grid-cols-1 place-content-start gap-9">
-                <h1 class='text-4xl font-["Roboto", serif] font-extrabold'>Create a New Prompt</h1>
+<main class="h-5/6 w-full mx-auto ">
+    <section class="rounded-3xl w-full h-auto shadow-lg shadow-black grid grid-cols-6 grid-rows-1 place-content-center place-items-center sm:max-w-[60%] mx-auto text-black m-14">
+        <section class="w-full col-span-3 text-black h-full bg-indigo-700 bg-opacity-90 rounded-l-3xl grid grid-cols-1 place-items-center p-5">
+            <form action="{{ route('prompts.store') }}" class="mb-auto w-full" method="POST" novalidate>
+                @csrf
+                <h1 class="text-center text-[1.75rem] font-bold">Create a Prompt</h1>
+                <div class="mt-2 mb-4 h-[2px] bg-black w-[95%] mx-auto"></div>
 
-                <form action="{{ url('/prompts')}}" method="POST" class="flex flex-col gap-5">
-                    <div class="flex flex-col justify-start items-start">
-                        <label class="font-semibold" for="title">Prompt Title:</label>
-                        <input class="h-8 rounded-md w-[45%] bg-gray-800 opacity-75 text-white outline-[3px] outline-black focus:border-none focus:ring-0 valid:outline-green-600 user-invalid:outline-red-600" type="text" name="title" id="title" required maxlength="30">
+                <div class="grid grid-cols-1 gap-6 mt-3">
+                    <div class="flex flex-col w-6/7 mx-3 justify-center">
+                        <label class="font-bold" for="title">Title:</label>
+                        <input class="bg-gray-900 border-0 rounded-md bg-opacity-75 w-3/6 text-white focus:ring-0 h-8 font-semibold valid:border-[2px] valid:border-green-600 group-invalid:border-[2px] group-invalid:border-red-600" type="text" name="title" id="title" required maxlength="55">
+                        @error('title')
+                            <p class="text-thin text-red-500 text-[0.85rem] mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
-
-                    <div class="flex flex-col justify-start items-start">
-                        <label class="font-semibold" for="title">Prompt Description:</label>
-                        <input class="h-8 rounded-md w-[70%] bg-gray-800 opacity-75 text-white focus:ring-0 outline-[3px] outline-black valid:outline-green-600 user-invalid:outline-red-600" type="text" name="title" id="title" required>
+                    
+                    <div class="flex flex-col w-6/7 mx-3 justify-center">
+                        <label class="font-bold text-black " for="description">Description:</label>
+                        <textarea class="w-5/6 bg-gray-900 bg-opacity-75 text-[0.8rem] focus:ring-0 text-white border-0 rounded-md valid:border-[1.5px] valid:border-green-600" name="description" id="description" required></textarea>
+                        @error('description')
+                            <p class="text-thin text-red-500 text-[0.85rem] mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
-
-                    <div class="flex flex-col justify-start items-start">
-                        <label class="font-semibold" for="title">Prompt Content:</label>
-                        <textarea class="overflow-hidden h-28 rounded-md max-w-[70%] w-full bg-gray-800 opacity-75 text-white focus:ring-0 outline-[3px] outline-black valid:outline-green-600 user-invalid:outline-red-600"  name="content" id="content" cols="40" rows="12"></textarea>
+                    
+                    <div class="flex flex-col w-6/7 mx-3 justify-center">
+                        <label class="font-bold" for="content">Content:</label>
+                        <textarea class="w-5/6 bg-gray-900 bg-opacity-75 text-[0.8rem] focus:ring-0  text-white border-0 rounded-md valid:border-[1.5px] valid:border-green-600" name="content" id="content" required></textarea>
+                        @error('content')
+                            <p class="text-thin text-red-500 text-[0.85rem] mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
-                </form>
-            </div>
+                    
+                    <div class="flex flex-row-reverse w-6/7 mx-4 justify-end gap-2 items-center ">
+                        <label class="font-thin text-[0.9rem] mb-[0.1rem] text-teal-500" for="is_public">make prompt public</label>
+                        <input class="bg-gray-900 border-0 rounded-md focus:ring-0 focus:border-0 focus:outline-none text-cyan-600 bg-opacity-75 w-5 h-5" type="checkbox" name="is_public" id="is_public">
+                    </div>
+                    
+                    <button class="bg-gradient-to-r from-blue-600 to-sky-500 max-w-[85%] w-full mx-auto shadow-md p-3 rounded-lg font-bold font-sans mb-5 hover:scale-105 transition-all duration-300 ease-in-out focus:text-white" type="submit">Submit Prompt</button>
+                </div>
+            </form>
         </section>
 
-        <section class="w-full col-span-2 h-[95%]">
-            <img class="rounded-lg shadow-md ring-1 h-full" src="https://img.freepik.com/vetores-premium/design-de-desenvolvedor-web_24911-42695.jpg" alt="creating-image">
+        <section class="w-full col-span-3 h-full">
+            <img class="rounded-r-3xl h-full" src="https://metainovacoes.com.br/wp-content/uploads/2021/06/computacao.jpg" alt="creating-image">
         </section>
     </section>
 
