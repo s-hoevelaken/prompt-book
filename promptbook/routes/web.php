@@ -6,27 +6,21 @@ use App\Livewire\Dashboard;
 
 use App\Livewire\Homepage;
 use App\Livewire\Creationpage;
+use App\Livewire\Viewpage;
+use App\Livewire\Feedpage;
 
 
-Route::view('/', 'welcome');
+// view routes
+Route::get('homepage', Homepage::class)->middleware(['auth', 'verified'])->name('homepage');
+Route::get('creationpage', Creationpage::class)->middleware(['auth'])->name('prompts.create');
+Route::get('viewpage', Viewpage::class)->middleware(['auth'])->name('prompts.view');
+Route::get('feedpage', Feedpage::class)->middleware(['auth'])->name('prompts.feed');
+
+Route::view('profile', 'profile')->middleware(['auth'])->name('profile');
 
 
-Route::get('homepage', Homepage::class)
-    ->middleware(['auth', 'verified'])
-    ->name('homepage');
-
-
-
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
-
-Route::get('creationpage', Creationpage::class)
-    ->middleware(['auth'])
-    ->name('prompts.create');
-
+// testing routes 
 Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity'])->middleware(['auth']);
-
 Route::view('/testing-prompt-retrieval', 'testing-prompt-retrieval');
     
 Route::post('/prompts', [PromptController::class, 'store'])

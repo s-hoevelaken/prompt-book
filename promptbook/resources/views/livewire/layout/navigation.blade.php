@@ -12,7 +12,7 @@ new class extends Component
     {
         $logout();
 
-        $this->redirect('/', navigate: true);
+        $this->redirect('/login', navigate: true);
     }
 }; ?>
 
@@ -60,7 +60,7 @@ new class extends Component
 
                         <!-- Authentication -->
                         <button wire:click="logout" class="w-full text-start">
-                            <x-dropdown-link>
+                            <x-dropdown-link href="#" wire:click.prevent="logout">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </button>
