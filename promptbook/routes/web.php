@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PromptController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\TestController;
 
 Route::view('/', 'welcome');
 
@@ -19,7 +21,7 @@ Route::get('/testing', function () {
 
 Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity'])->middleware(['auth']);
 
-Route::view('/testing-prompt-retrieval', 'testing-prompt-retrieval');
+Route::get('/testing-prompt-retrieval', [TestController::class, 'index'])->middleware('auth');
     
 Route::post('/prompts', [PromptController::class, 'store'])->middleware('auth');
 
@@ -32,6 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/prompts/all-prompts', [PromptController::class, 'allPrompts']);
     Route::post('/prompts/{id}/like', [PromptController::class, 'toggleLike']);
     Route::post('/prompts/{id}/save', [PromptController::class, 'toggleFavorite']);
+    Route::post('/comments/{id}/like', [CommentController::class, 'toggleLike']);
+    Route::get('/prompts/{id}/comments', [CommentController::class, 'getComments']);
+    Route::post('/storeComment', [CommentController::class, 'store']);
 });
 
 require __DIR__ . '/auth.php';

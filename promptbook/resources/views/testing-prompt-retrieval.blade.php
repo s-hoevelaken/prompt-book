@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Testing Prompt Retrieval</title>
     <style>
         .prompt {
@@ -42,6 +43,7 @@
         let myPromptsPage = 1;
         let allPromptsPage = 1;
         const authenticatedUserId = {{ Auth::id() }};
+        console.log(`authenticatedUserId ====: ${authenticatedUserId}`)
 
         async function fetchPrompts(url, containerId, page, initialLoad = false) {
             try {
@@ -78,7 +80,7 @@
                         <div class="dropdown">
                             <button>Options</button>
                             <div class="dropdown-content">
-                            <button id="like-button-${prompt.id}" onclick="likePrompt(${prompt.id})">
+                                <button id="like-button-${prompt.id}" onclick="likePrompt(${prompt.id})">
                                     ${prompt.liked ? 'Unlike' : 'Like'}
                                 </button>
                                 <button id="favorite-button-${prompt.id}" onclick="favoritePrompt(${prompt.id})">
@@ -91,11 +93,142 @@
                                 ` : ''}
                             </div>
                         </div>
+                        <button onclick="toggleComments(${prompt.id})">Show Comments</button>
+                        <div id="comments-${prompt.id}" class="comments" style="display: none;">
+                            <div id="comment-list-${prompt.id}"></div>
+                            <textarea id="new-comment-${prompt.id}" placeholder="Add a comment"></textarea>
+                            <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
+                            <button onclick="submitComment(${prompt.id})">Submit Comment</button>
+                        </div>
                     </div>
                 `;
                 container.appendChild(promptDiv);
             });
         }
+
+        async function toggleComments(promptId) {
+            const commentsDiv = document.getElementById(`comments-${promptId}`);
+            const commentListDiv = document.getElementById(`comment-list-${promptId}`);
+
+            if (commentsDiv.style.display === 'none') {
+                commentsDiv.style.display = 'block';
+                await loadComments(promptId, commentListDiv);
+            } else {
+                commentsDiv.style.display = 'none';
+            }
+        }
+
+        async function loadComments(promptId, container) {
+            try {
+                const response = await fetch(`/prompts/${promptId}/comments`);
+                if (!response.ok) {
+                    throw new Error('Failed to load comments');
+                }
+                const comments = await response.json();
+                displayComments(comments, container);
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<p>Error loading comments.</p>';
+            }
+        }
+
+        function displayComments(response, container) {
+            const comments = response.comments || [];
+            if (!Array.isArray(comments)) {
+                console.error('Expected comments to be an array but received:', comments);
+                return;
+            }
+
+            container.innerHTML = '';
+            comments.forEach(comment => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'comment';
+                commentDiv.innerHTML = `
+                    <p><strong>${comment.user ? comment.user.name : 'Unknown'}:</strong> ${comment.content}</p>
+                    <button onclick="likeComment(${comment.id})">${comment.liked ? 'Unlike' : 'Like'}</button>
+                `;
+                container.appendChild(commentDiv);
+            });
+        }
+
+
+        async function submitComment(promptId) {
+            console.log('submitComment called with promptId:', promptId);
+
+            const commentContent = document.getElementById(`new-comment-${promptId}`).value;
+            console.log('Comment content:', commentContent);
+
+            if (!commentContent) {
+                alert('Comment cannot be empty.');
+                return;
+            }
+
+            try {
+                console.log('Sending POST request to /storeComment'); 
+
+                const response = await fetch(`/storeComment`, {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        prompt_id: promptId,
+                        content: commentContent 
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => console.log('data is submitted: ', data))
+                .catch(error => console.error('Error submitting data: ', error))
+
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    console.error('Failed to submit comment. Status:', response.status);
+                    throw new Error('Failed to submit comment');
+                }
+
+                const comment = await response.json();
+                console.log('Received response:', comment);
+
+                document.getElementById(`new-comment-${promptId}`).value = '';
+                const commentListDiv = document.getElementById(`comment-list-${promptId}`);
+                
+                displayComments([comment], commentListDiv);
+                console.log('Comment added to display');
+            } catch (error) {
+                console.error('Error occurred in submitComment:', error);
+                alert('Error submitting comment.');
+            }
+        }
+
+
+
+
+
+        async function likeComment(commentId) {
+            try {
+                const response = await fetch(`/comments/${commentId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to like comment');
+                }
+
+                const data = await response.json();
+                alert(data.message);
+            } catch (error) {
+                console.error(error);
+                alert('Error liking comment.');
+            }
+        }
+
 
         async function likePrompt(promptId) {
             try {
@@ -118,7 +251,6 @@
                 alert('Error liking prompt.');
             }
         }
-        
 
         async function editPrompt(promptId) {
             const promptContainer = document.getElementById(`prompt-${promptId}`);
@@ -139,62 +271,64 @@
             }
         }
 
-async function submitEditedPrompt(promptId) {
-    const title = document.getElementById(`edit-title-${promptId}`).value;
-    const description = document.getElementById(`edit-description-${promptId}`).value;
-    const content = document.getElementById(`edit-content-${promptId}`).value;
+        async function submitEditedPrompt(promptId) {
+            const title = document.getElementById(`edit-title-${promptId}`).value;
+            const description = document.getElementById(`edit-description-${promptId}`).value;
+            const content = document.getElementById(`edit-content-${promptId}`).value;
 
-    console.log('Attempting to save prompt:', { title, description, content });
-    try {
-        const response = await fetch(`/prompts/${promptId}`, {
-            method: 'PUT',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ title, description, content })
-        });
-        
-        if (!response.ok) {
-            throw new Error('Failed to save prompt');
-        }
+            console.log('Attempting to save prompt:', { title, description, content });
+            try {
+                const response = await fetch(`/prompts/${promptId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        title: title,
+                        description: description,
+                        content: content })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to save prompt');
+                }
 
-        const data = await response.json();
-        alert(data.message);
+                const data = await response.json();
+                alert(data.message);
 
-        fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
-    } catch (error) {
-        console.error(error);
-        alert('Error saving prompt.');
-    }
-}
-
-async function favoritePrompt(promptId) {
-    try {
-        const response = await fetch(`/prompts/${promptId}/save`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
+                fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
+            } catch (error) {
+                console.error(error);
+                alert('Error saving prompt.');
             }
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to favorite prompt');
         }
 
-        const data = await response.json();
-        alert(data.message);
-    } catch (error) {
-        console.error(error);
-        alert('Error favoriting prompt.');
-    }
-}
+        async function favoritePrompt(promptId) {
+            try {
+                const response = await fetch(`/prompts/${promptId}/save`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-function cancelEdit(promptId) {
-    fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
-}
+                if (!response.ok) {
+                    throw new Error('Failed to favorite prompt');
+                }
 
+                const data = await response.json();
+                alert(data.message);
+            } catch (error) {
+                console.error(error);
+                alert('Error favoriting prompt.');
+            }
+        }
+
+        function cancelEdit(promptId) {
+            fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
+        }
 
         async function togglePublicity(promptId) {
             try {

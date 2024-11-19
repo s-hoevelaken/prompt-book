@@ -90,7 +90,7 @@ class PromptController extends Controller
                      ->orderBy('created_at', 'desc')
                      ->paginate(10);
 
-        $prompts->getCollection()->transform(function ($prompt) {
+        $prompts->getCollection()->transform(callback: function ($prompt) {
             $prompt->liked = $prompt->likes->contains('user_id', Auth::id());
             $prompt->favorited = $prompt->favorites->contains('user_id', Auth::id());
             unset($prompt->likes);
