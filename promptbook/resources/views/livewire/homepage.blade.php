@@ -57,7 +57,7 @@
                     
                     <div class="text-sm px-5 flex flex-col h-1/2 gap-9">
                         <h2 class="text-start text-[1rem]">Here you can view or modify your own prompts to your liking</h2>
-                        @component('components.go-to-redirect', ['route' => route('prompts.create')])
+                        @component('components.go-to-redirect', ['route' => route('prompts.view')])
                         @endcomponent
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                     
                     <div class="text-sm px-5 flex flex-col h-1/2 gap-9">
                         <h2 class="text-start text-[1rem]">View other peoples prompts and take inspiration from them in the feed</h2>
-                        @component('components.go-to-redirect', ['route' => route('prompts.create')])
+                        @component('components.go-to-redirect', ['route' => route('prompts.feed')])
                         @endcomponent
                     </div>
                 </div>

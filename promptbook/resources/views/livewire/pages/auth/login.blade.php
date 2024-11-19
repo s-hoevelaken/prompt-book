@@ -20,10 +20,9 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
 
-        $this->redirectIntended(default: route('homepage', absolute: false), navigate: true);
+        $this->redirectIntended(default: route('homepage'), navigate: true);
     }
 }; ?>
-
 <div>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
