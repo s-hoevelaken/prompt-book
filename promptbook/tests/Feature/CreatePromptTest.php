@@ -2,45 +2,61 @@
 
 namespace Tests\Feature;
 
-use App\Models\Prompt;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Livewire\Livewire;
-use PHPUnit\Framework\Attributes\Test;
+use App\Http\Requests\StorePromptRequest;
+use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
-/*
-    To run this test you need to run the following command:
-    php artisan test --filter CreatePrompt
-*/
 class CreatePromptTest extends TestCase
 {
     use RefreshDatabase;
 
-    #[Test]
-    public function a_user_can_create_a_prompt()
+    public function test_a_user_can_create_a_prompt()
     {
-        // Arrange: Define valid prompt data
-        $prompt = [
+        // Arrange: Create a user and define valid prompt data
+        $user = User::factory()->create();
+        $promptData = [
             'title' => 'My First Prompt',
-            'description' => 'This is my first prompt',
-            'content' => 'This is the content of my first prompt',
-            'is_public' => 1,
+            'description' => '<p>This is my first prompt</p>',
+            'content' => '<p>This is the content of my first prompt</p>',
+            'is_public' => 1, 
         ];
 
-        // Act: Simulate the Livewire component's `create` method
-        Livewire::test('pages.create')
-            ->set('form.title', $prompt['title'])
-            ->set('form.description', $prompt['description'])
-            ->set('form.content', $prompt['content'])
-            ->set('form.is_public', $prompt['is_public'])
-            ->assertRedirect(route('homepage'));
+        // Act: Simulate the user submitting the form to create a prompt
+        $response = $this->actingAs($user)->post(route('prompts.store'), $promptData);
+    
 
-        // Assert: Verify prompt creation 
-        $this->assertDatabaseHas('prompts', ['title' => $prompt['title']]);
-        $this->assertDatabaseHas('prompts', ['description' => $prompt['description']]);
-        $this->assertDatabaseHas('prompts', ['content' => $prompt['content']]);
-        $this->assertDatabaseHas('prompts', ['is_public' => $prompt['is_public']]);
+        // Assert: Check that the prompt was created and the user was redirected
+        $response->assertRedirect(route('homepage'));
+        $this->assertDatabaseHas('prompts', [
+            'title' => 'My First Prompt',
+            'description' => '<p>This is my first prompt</p>',
+            'content' => '<p>This is the content of my first prompt</p>',
+            'is_public' => 1,
+            'user_id' => $user->id,
+        ]);
+    }
 
-        $this->assertAuthenticated();
+    public function test_invalid_data_fails_validation()
+    {
+        // Arrange: Define invalid prompt data
+        $data = [
+            'title' => '',
+            'description' => str_repeat('a', 501), 
+            'content' => 'short', 
+            'is_public' => 'not_boolean',
+        ];
+
+        // Act: Simulate the user submitting the form to create a prompt
+        $request = new StorePromptRequest();
+        $validator = Validator::make($data, $request->rules());
+
+        // Assert: Check that the prompt was created and the user was redirected
+        $this->assertFalse($validator->passes());
+        $this->assertArrayHasKey('title', $validator->errors()->toArray());
+        $this->assertArrayHasKey('description', $validator->errors()->toArray());
+        $this->assertArrayHasKey('content', $validator->errors()->toArray());
+        $this->assertArrayHasKey('is_public', $validator->errors()->toArray());
     }
 }
