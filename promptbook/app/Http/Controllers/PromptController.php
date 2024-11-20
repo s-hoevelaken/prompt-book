@@ -13,6 +13,18 @@ use Illuminate\Support\Facades\Auth;
 
 class PromptController extends Controller
 {
+    public function searchByTitle(Request $request)
+    {
+        $query = $request->input('query');
+
+        $prompts = Prompt::where('title', 'LIKE', "%{$query}%")
+        ->where('user_id', '!=', Auth::id())
+        ->get();
+
+        return response()->json(['prompts' => $prompts]);
+    }
+
+
     public function toggleLike($id)
     {
         $user = Auth::id();

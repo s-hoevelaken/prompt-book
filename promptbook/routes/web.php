@@ -3,10 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PromptController;
 use App\Livewire\Dashboard;
-
 use App\Livewire\Homepage;
 use App\Livewire\Creationpage;
-
 
 Route::view('/', 'welcome');
 
@@ -16,6 +14,10 @@ Route::get('homepage', Homepage::class)
     ->name('homepage');
 
 
+Route::view('/search-prompts', 'search-prompts')->middleware('auth')->name('search.prompts.view');
+
+
+Route::get('/search-prompts-results', [PromptController::class, 'searchByTitle'])->middleware('auth')->name('search.prompts.results');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
