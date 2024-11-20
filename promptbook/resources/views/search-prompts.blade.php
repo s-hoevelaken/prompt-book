@@ -44,6 +44,7 @@
             throw new Error('Failed to fetch search results');
         }
 
+
         const data = await response.json();
         console.log('Received search results:', data);
 

@@ -10,19 +10,29 @@ use App\Http\Requests\StorePromptRequest;
 use App\Http\Requests\EditPromptRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PromptController extends Controller
 {
     public function searchByTitle(Request $request)
     {
-        $query = $request->input('query');
+        Log::info('Search request received:', ['query' => $request->input('query')]);
 
-        $prompts = Prompt::where('title', 'LIKE', "%{$query}%")
+        $query = strtolower($request->input('query'));
+
+        $prompts = DB::table('prompts')
+        ->where(function ($q) use ($query) {
+            $q->where(DB::raw('LOWER(title)'), 'LIKE', "%{$query}%")
+              ->orWhere(DB::raw('LOWER(description)'), 'LIKE', "%{$query}%");
+        })
         ->where('user_id', '!=', Auth::id())
         ->get();
 
+        Log::info('Search results:', ['results' => $prompts]);
+
         return response()->json(['prompts' => $prompts]);
     }
+
 
 
     public function toggleLike($id)
