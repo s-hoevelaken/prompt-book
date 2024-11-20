@@ -21,9 +21,12 @@ class Viewpage extends Component
     #[Title('View your Prompts')]
     public function render()
     {
-        // get the prompts of the user
-        $prompts = Prompt::where('user_id', $this->user_id)->get();
-
+        $prompts = Prompt::where('user_id', $this->user_id)->get()->transform(function ($prompt) {
+            $prompt->description = strip_tags($prompt->description);
+            $prompt->content = strip_tags($prompt->content);
+            return $prompt;
+        });
+    
         return view('livewire.pages.viewpage', [
             'prompts' => $prompts
         ])->layout('layouts.app');
