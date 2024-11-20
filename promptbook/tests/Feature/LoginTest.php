@@ -8,6 +8,11 @@ use Livewire\Livewire;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
+/*
+    To run this test you need to run the following command:
+    php artisan test --filter LoginTest
+*/
+
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
@@ -15,19 +20,20 @@ class LoginTest extends TestCase
     #[Test]
     public function a_user_can_login_with_valid_data()
     {
-        $data = [
+        // Arrange: Create a user
+        $user = User::factory()->create([
             'email' => 'johndoe@example.com',
-            'password' => 'password123',
-        ];
+            'password' => bcrypt('password123'),
+        ]);
 
+        // Act: Test the Livewire component
         Livewire::test('pages.auth.login')
-            ->set('email', $data['email'])
-            ->set('password', $data['password'])
+            ->set('form.email', 'johndoe@example.com')
+            ->set('form.password', 'password123')
             ->call('login')
-            ->assertRedirect(route('homepage'));
+            ->assertRedirect(route('homepage')); 
 
-        // Assert: Verify user creation and authentication
-        $this->assertDatabaseHas('users', ['email' => $data['email']]);
-        $this->assertAuthenticated();
+        // Assert: Check authentication status
+        $this->assertAuthenticatedAs($user);
     }
 }

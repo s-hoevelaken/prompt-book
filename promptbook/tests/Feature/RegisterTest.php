@@ -8,6 +8,11 @@ use Livewire\Livewire;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
+/*
+    To run this test you need to run the following command:
+    php artisan test --filter RegisterTest
+*/
+
 class RegisterTest extends TestCase
 {
     use RefreshDatabase;
@@ -23,6 +28,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'password123',
         ];
 
+
         // Act: Simulate the Livewire component's `register` method
         Livewire::test('pages.auth.register')
             ->set('name', $data['name'])
@@ -30,7 +36,8 @@ class RegisterTest extends TestCase
             ->set('password', $data['password'])
             ->set('password_confirmation', $data['password_confirmation'])
             ->call('register')
-            ->assertRedirect(route('homepage')); // Adjust route if needed
+            ->assertRedirect(route('homepage'));
+
 
         // Assert: Verify user creation and authentication
         $this->assertDatabaseHas('users', ['email' => $data['email']]);
