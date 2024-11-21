@@ -20,3 +20,29 @@ nav.disappear {
 .clip-diagonal {
     clip-path: polygon(0 0, 100% 20px, 100% 100%, 0 100%);
 }
+
+
+.overflow-y-scroll::-webkit-scrollbar {
+    width: 6px; /* Adjust the width for vertical scrollbar */
+}
+
+/* Style the scrollbar track */
+.overflow-y-scroll::-webkit-scrollbar-track {
+    background: #2a2a2a; /* Light gray or any background color for the track */
+}
+
+/* Style the draggable part of the scrollbar */
+.overflow-y-scroll::-webkit-scrollbar-thumb {
+    background: #888; /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Optional: make it rounded */
+}
+
+/* Change the color of the thumb when hovering */
+.overflow-y-scroll::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Darker color when hovered */
+}
+
+
+.prompt-card-bg {
+    background-color: rgb(73, 52, 106);
+}
