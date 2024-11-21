@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Title;
+use App\Http\Controllers\PromptController;
 use App\Models\Prompt;
 
 class Viewpage extends Component
@@ -17,7 +18,6 @@ class Viewpage extends Component
         $this->user_id = Auth::id();
     }
 
-
     #[Title('View your Prompts')]
     public function render()
     {
@@ -26,9 +26,16 @@ class Viewpage extends Component
             $prompt->content = strip_tags($prompt->content);
             return $prompt;
         });
-    
+
+        $promptController = new PromptController();
+        $favPromptsResponse = $promptController->allFavoritedPrompts();
+
+        $favPromptsData = $favPromptsResponse->getData(assoc: true);
+
+        $favPrompts = $favPromptsData['data'];
         return view('livewire.pages.viewpage', [
-            'prompts' => $prompts
+            'prompts' => $prompts,
+            'favPrompts' => $favPrompts
         ])->layout('layouts.app');
     }
 }
