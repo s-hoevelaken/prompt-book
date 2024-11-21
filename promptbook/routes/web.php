@@ -27,10 +27,10 @@ Route::get('/search-prompts-results', [PromptController::class, 'searchByTitle']
 // update routes
 Route::middleware('auth')->group(function () {
     Route::post('/prompts', [PromptController::class, 'store'])->name('prompts.store');
-    Route::put('/prompts/{id}', [PromptController::class, 'update'])->middleware('auth')->name('prompts.update');
-    Route::delete('/prompts/{id}', [PromptController::class, 'destroy'])->middleware('auth')->name('prompts.destroy');
+    Route::put('/prompts/{id}', [PromptController::class, 'update'])->name('prompts.update');
+    Route::delete('/prompts/{id}', [PromptController::class, 'destroy'])->name('prompts.destroy');
     
-    Route::post('/prompts/{id}/like', [PromptController::class, 'toggleLike']);
+    Route::post('/prompts/{id}/like', [PromptController::class, 'toggleLike'])->name('prompts.toggleLike');
     Route::post('/prompts/{id}/save', [PromptController::class, 'toggleFavorite']);
 });
 
@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/prompts/my-prompts', [PromptController::class, 'myPrompts']);
     Route::get('/prompts/all-prompts', [PromptController::class, 'allPrompts']);
-    Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity'])->middleware(['auth']);
+    Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity']);
 });
 
 
@@ -53,7 +53,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/prompts/my-prompts', [PromptController::class, 'myPrompts']);
     Route::get('/prompts/favorited-prompts', [PromptController::class, 'allFavoritedPrompts']);
     Route::get('/prompts/all-prompts', [PromptController::class, 'allPrompts']);
-    Route::post('/prompts/{id}/like', [PromptController::class, 'toggleLike']);
     Route::post('/prompts/{id}/save', [PromptController::class, 'toggleFavorite']);
 });
 
