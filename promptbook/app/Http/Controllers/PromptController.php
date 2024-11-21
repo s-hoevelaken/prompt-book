@@ -77,9 +77,17 @@ class PromptController extends Controller
         }
     }
 
+
     public function store(StorePromptRequest $request)
     {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Unauthorized.'], 403);
+        }
+
         $validatedData = $request->validated();
+        $validatedData['content'] = clean($validatedData['content']);
+        $validatedData['description'] = clean($validatedData['description']);
+
 
         $prompt = Prompt::create([
             'user_id' => Auth::id(),

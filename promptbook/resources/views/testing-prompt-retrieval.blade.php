@@ -136,9 +136,9 @@
                 const content = promptContainer.querySelector('p:nth-of-type(2)').innerText.replace('Content: ', '');
                 
                 promptContainer.innerHTML = `
-                    <input type="text" id="edit-title-${promptId}" value="${title}" /><br>
-                    <textarea id="edit-description-${promptId}">${description}</textarea><br>
-                    <textarea id="edit-content-${promptId}">${content}</textarea><br>
+                    <input type="text" name="title" id="edit-title-${promptId}" value="${title}" /><br>
+                    <textarea id="edit-description-${promptId}" name="description">${description}</textarea><br>
+                    <textarea id="edit-content-${promptId}" name="edit-content">${content}</textarea><br>
                     <button onclick="submitEditedPrompt(${promptId})">Save</button>
                     <button onclick="cancelEdit(${promptId})">Cancel</button>
                 `;

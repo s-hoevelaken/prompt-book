@@ -22,10 +22,10 @@ class EditPromptRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:55',
-            'description' => 'nullable|string',
-            'content' => 'required|string',
-            'is_public' => 'nullable|integer'
+            'title' => 'required|string|max:55|unique:prompts,title',
+            'description' => 'nullable|string|max:500',
+            'content' => 'required|string|min:10|max:1000',
+            'is_public' => 'nullable|integer|boolean'
         ];
     }
 
