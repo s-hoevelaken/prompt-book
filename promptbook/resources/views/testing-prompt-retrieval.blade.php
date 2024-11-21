@@ -38,9 +38,15 @@
     <div id="all-prompts"></div>
     <button id="load-more-all-prompts" onclick="loadMorePrompts('/prompts/all-prompts', 'all-prompts')">Load More Public Prompts</button>
 
+    <h1>Favorited Prompts</h1>
+    <div id="favorited-prompts"></div>
+    <button id="load-more-favorited-prompts" onclick="loadMorePrompts('/prompts/favorited-prompts', 'favorited-prompts')">Load More Favorited Prompts</button>
+
+
     <script>
         let myPromptsPage = 1;
         let allPromptsPage = 1;
+        let favoritedPromptsPage = 1;
         const authenticatedUserId = {{ Auth::id() }};
 
         async function fetchPrompts(url, containerId, page, initialLoad = false) {
@@ -246,6 +252,7 @@ function cancelEdit(promptId) {
 
         fetchPrompts('/prompts/my-prompts', 'my-prompts', myPromptsPage, true);
         fetchPrompts('/prompts/all-prompts', 'all-prompts', allPromptsPage, true);
+        fetchPrompts('/prompts/favorited-prompts', 'favorited-prompts', favoritedPromptsPage, true);
     </script>
 </body>
 </html>

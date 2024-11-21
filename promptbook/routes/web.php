@@ -3,13 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PromptController;
 use App\Livewire\Dashboard;
-
 use App\Livewire\Homepage;
 use App\Livewire\Creationpage;
 use App\Livewire\Viewpage;
 use App\Livewire\Feedpage;
-
-
+Route::view('/', 'welcome');
 
 
 // view routes
@@ -21,6 +19,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('profile', 'profile')->name('profile');
 });
 
+
+Route::view('/search-prompts', 'search-prompts')->middleware('auth')->name('search.prompts.view');
+
+
+Route::get('/search-prompts-results', [PromptController::class, 'searchByTitle'])->middleware('auth')->name('search.prompts.results');
 
 // update routes
 Route::middleware('auth')->group(function () {
@@ -47,5 +50,12 @@ Route::view('/testing-prompt-retrieval', 'testing-prompt-retrieval');
 
 
 
+Route::middleware('auth')->group(function () {
+    Route::get('/prompts/my-prompts', [PromptController::class, 'myPrompts']);
+    Route::get('/prompts/favorited-prompts', [PromptController::class, 'allFavoritedPrompts']);
+    Route::get('/prompts/all-prompts', [PromptController::class, 'allPrompts']);
+    Route::post('/prompts/{id}/like', [PromptController::class, 'toggleLike']);
+    Route::post('/prompts/{id}/save', [PromptController::class, 'toggleFavorite']);
+});
 
 require __DIR__ . '/auth.php';
