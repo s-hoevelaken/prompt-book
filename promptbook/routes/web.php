@@ -20,9 +20,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
+// search routes
 Route::view('/search-prompts', 'search-prompts')->middleware('auth')->name('search.prompts.view');
-
-
 Route::get('/search-prompts-results', [PromptController::class, 'searchByTitle'])->middleware('auth')->name('search.prompts.results');
 
 // update routes

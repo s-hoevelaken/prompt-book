@@ -22,7 +22,7 @@ class RemovePromptTest extends TestCase
     {
         // Arrange: Create a user
         $user = User::factory()->create();
-        
+
         // Assert: Check that the user exists in the database
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -91,4 +91,22 @@ class RemovePromptTest extends TestCase
         ]);
     }
 
+    public function test_unauthorized_user_cannot_delete_a_prompt()
+    {
+        $prompt = Prompt::factory()->create();
+
+        $this->withoutMiddleware();
+
+        $response = $this->delete(route('prompts.destroy', $prompt->id));
+        $response->assertStatus(404);
+    }
+
+    public function test_unknown_user_cannot_delete_a_prompt()
+    {
+        $prompt = Prompt::factory()->create();
+    
+        $response = $this->delete(route('prompts.destroy', $prompt->id));
+    
+        $response->assertStatus(302);
+    }
 }
