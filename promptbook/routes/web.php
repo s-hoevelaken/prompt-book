@@ -7,8 +7,8 @@ use App\Livewire\Homepage;
 use App\Livewire\Creationpage;
 use App\Livewire\Viewpage;
 use App\Livewire\Feedpage;
-Route::view('/', 'welcome');
 
+Route::view('/', 'welcome');
 
 // view routes
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -29,7 +29,7 @@ Route::get('/search-prompts-results', [PromptController::class, 'searchByTitle']
 Route::middleware('auth')->group(function () {
     Route::post('/prompts', [PromptController::class, 'store'])->name('prompts.store');
     Route::put('/prompts/{id}', [PromptController::class, 'update'])->middleware('auth')->name('prompts.update');
-    Route::delete('/prompts/{id}', [PromptController::class, 'destroy'])->middleware('auth');
+    Route::delete('/prompts/{id}', [PromptController::class, 'destroy'])->middleware('auth')->name('prompts.destroy');
     
     Route::post('/prompts/{id}/like', [PromptController::class, 'toggleLike']);
     Route::post('/prompts/{id}/save', [PromptController::class, 'toggleFavorite']);

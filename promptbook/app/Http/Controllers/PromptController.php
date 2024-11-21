@@ -85,9 +85,6 @@ class PromptController extends Controller
         }
 
         $validatedData = $request->validated();
-        $validatedData['content'] = clean($validatedData['content']);
-        $validatedData['description'] = clean($validatedData['description']);
-
 
         $prompt = Prompt::create([
             'user_id' => Auth::id(),
