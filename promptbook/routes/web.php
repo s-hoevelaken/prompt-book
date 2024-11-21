@@ -41,6 +41,7 @@ Route::put('/prompts/{id}', [PromptController::class, 'update'])->middleware('au
 
 Route::middleware('auth')->group(function () {
     Route::get('/prompts/my-prompts', [PromptController::class, 'myPrompts']);
+    Route::get('/prompts/favorited-prompts', [PromptController::class, 'allFavoritedPrompts']);
     Route::get('/prompts/all-prompts', [PromptController::class, 'allPrompts']);
     Route::post('/prompts/{id}/like', [PromptController::class, 'toggleLike']);
     Route::post('/prompts/{id}/save', [PromptController::class, 'toggleFavorite']);
