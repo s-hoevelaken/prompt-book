@@ -52,7 +52,7 @@
                 <p class="text-[0.8rem]">Create a new prompt to get started</p>
             </div>
         @else
-            <div class="w-full grid sm:grid-cols-4 place-content-center place-items-center gap-8 items-start">
+            <div class="w-full grid sm:grid-cols-4  grid-cols-2 place-content-center place-items-center gap-8 items-start">
                 @foreach ($prompts as $prompt)
                     <div class="w-full prompt-card-bg p-3 rounded-md h-auto overflow-y-scroll max-h-36 shadow-md shadow-purple-700 hover:scale-[1.025] transition-all duration-300 ease-in-out">
                         <div class="flex flex-col items-start justify-start leading-5 mb-3">
