@@ -20,6 +20,10 @@
             <div class="mb-2">
                 <p class="text-sm font-semibold text-indigo-400">{{ $comment->user->name }}</p>
                 <p class="text-gray-300 text-xs">{{ $comment->content }}</p>
+                <div class="w-[7.5%]">
+                    @component('components.promptbook.like-and-favorite-on-comment', ['comment' => $comment])
+                    @endcomponent
+                </div>
                 <p class="text-[0.7rem] text-gray-500 mt-1">{{ $comment->created_at->diffForHumans() }}</p>
             </div>
         @endforeach

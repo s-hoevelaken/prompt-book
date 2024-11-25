@@ -7,7 +7,6 @@ use Livewire\Attributes\Title;
 use Livewire\WithPagination;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 use App\Models\Like;
 use App\Models\Comment;
@@ -27,21 +26,23 @@ class Feedpage extends Component
     public $isMessageVisible = true;
     public $expandedDescriptions = [];
 
-    // Listen to the 'refreshComments' event and trigger $refresh
     protected $listeners = ['refreshComments' => '$refresh', 'flashmessage' => 'dismissFlashMessage'];
 
+    
+    /*
+        Dismiss the flash message
+    */
     public function dismissFlashMessage()
     {
-        $this->isMessageVisible = false; // Hide the message when clicked
+        $this->isMessageVisible = false;
     }
+
 
     /*
         Add a comment to a prompt
     */
     public function addComment($promptId)
     {
-        Log::info("Adding comment to prompt: " . $promptId);
-
         $this->validate([
             'newComment' => 'required|max:100',
         ]);
@@ -59,16 +60,15 @@ class Feedpage extends Component
             'content' => $this->newComment,
         ]);
 
-        Log::info("Comment created");
-
         $this->newComment = '';
-
         $this->flashMessage = 'Comment added.';
         $this->isMessageVisible = true;
+        
+        // refresh comments
         $this->dispatch('refreshComments'); 
-
         session()->flash('message', 'Comment added.');
     }
+
 
     /*
         Filter prompts by likes, favorites or search
@@ -83,6 +83,7 @@ class Feedpage extends Component
         $this->filter = '';
     }
 
+
     /*
         Increase content length
     */
@@ -94,6 +95,7 @@ class Feedpage extends Component
             $this->expandedDescriptions[$id] = true;
         }
     }
+
 
     /*
         Like or Favorite a prompt
@@ -124,6 +126,54 @@ class Feedpage extends Component
         }
     }
 
+
+    /*
+        Like or Favorite a comment
+    */
+    public function toggleCommentLike($commentId)
+    {
+        $comment = Comment::find($commentId);
+
+        if (!$comment) {
+            session()->flash('error', 'Comment not found.');
+            return;
+        }
+
+        $like = $comment->likes()->where('user_id', Auth::id())->first();
+
+        if ($like) {
+            $like->delete();
+        } else {
+            $comment->likes()->create(['user_id' => Auth::id()]);
+        }
+
+        $this->dispatch('refreshComments');
+    }
+
+    public function toggleCommentFavourite($commentId)
+    {
+        $comment = Comment::find($commentId);
+
+        if (!$comment) {
+            session()->flash('error', 'Comment not found.');
+            return;
+        }
+
+        $favourite = $comment->favorites()->where('user_id', Auth::id())->first();
+
+        if ($favourite) {
+            $favourite->delete();
+        } else {
+            $comment->favorites()->create(['user_id' => Auth::id()]);
+        }
+
+        $this->dispatch('refreshComments');
+    }
+
+
+    /* 
+        Page rendering
+    */
     #[Title('Prompts feed page')]
     public function render()
     {
@@ -140,8 +190,6 @@ class Feedpage extends Component
                 $query->where('user_id', Auth::id());
             });
         }
-
-        Log::info("Filter applied: " . $this->filter);
 
         $prompts = $query->orderBy('created_at', 'desc')->paginate($this->pagination);
 
