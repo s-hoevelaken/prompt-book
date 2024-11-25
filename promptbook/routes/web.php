@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/prompts/{id}', [PromptController::class, 'destroy'])->name('prompts.destroy');
     
     Route::post('/prompts/{id}/like', [PromptController::class, 'toggleLike'])->name('prompts.toggleLike');
-    Route::post('/prompts/{id}/save', [PromptController::class, 'toggleFavorite']);
+    Route::post('/prompts/{id}/save', [PromptController::class, 'toggleFavorite'])->name('prompts.toggleFavorite');
 });
 
 
@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/prompts/my-prompts', [PromptController::class, 'myPrompts']);
     Route::get('/prompts/all-prompts', [PromptController::class, 'allPrompts']);
-    Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity']);
+    Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity'])->name('prompts.togglePublicity');
 });
 
 
@@ -53,7 +53,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/prompts/my-prompts', [PromptController::class, 'myPrompts']);
     Route::get('/prompts/favorited-prompts', [PromptController::class, 'allFavoritedPrompts']);
     Route::get('/prompts/all-prompts', [PromptController::class, 'allPrompts']);
-    Route::post('/prompts/{id}/save', [PromptController::class, 'toggleFavorite']);
 });
 
 require __DIR__ . '/auth.php';
