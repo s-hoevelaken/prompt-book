@@ -20,4 +20,9 @@ class Like extends Model
     {
         return $this->belongsTo(Prompt::class);
     }
+
+    public function comment()
+    {
+        return $this->belongsTo(Comment::class);
+    }
 }

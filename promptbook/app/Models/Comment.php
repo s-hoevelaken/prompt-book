@@ -18,6 +18,26 @@ class Comment extends Model
         return $this->belongsTo(Prompt::class);
     }
 
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function isLikedBy($userId)
+    {
+        return $this->likes()->where('user_id', $userId)->exists();
+    }
+
+    public function isFavouritedBy($userId)
+    {
+        return $this->favorites()->where('user_id', $userId)->exists();
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -65,6 +65,7 @@ class Feedpage extends Component
 
         $this->flashMessage = 'Comment added.';
         $this->isMessageVisible = true;
+        
         $this->dispatch('refreshComments'); 
 
         session()->flash('message', 'Comment added.');
@@ -122,6 +123,47 @@ class Feedpage extends Component
         } else {
             Favorite::create(['user_id' => Auth::id(), 'prompt_id' => $promptId]);
         }
+    }
+
+    public function toggleCommentLike($commentId)
+    {
+        $comment = Comment::find($commentId);
+
+        if (!$comment) {
+            session()->flash('error', 'Comment not found.');
+            return;
+        }
+
+        $like = $comment->likes()->where('user_id', Auth::id())->first();
+
+        if ($like) {
+            $like->delete();
+        } else {
+            $comment->likes()->create(['user_id' => Auth::id()]);
+        }
+
+        $this->dispatch('refreshComments');
+    }
+
+
+    public function toggleCommentFavourite($commentId)
+    {
+        $comment = Comment::find($commentId);
+
+        if (!$comment) {
+            session()->flash('error', 'Comment not found.');
+            return;
+        }
+
+        $favourite = $comment->favorites()->where('user_id', Auth::id())->first();
+
+        if ($favourite) {
+            $favourite->delete();
+        } else {
+            $comment->favorites()->create(['user_id' => Auth::id()]);
+        }
+
+        $this->dispatch('refreshComments');
     }
 
     #[Title('Prompts feed page')]

@@ -52,20 +52,20 @@
                                     <button wire:click="toggleDescription({{ $user->id }})" class="text-indigo-400 ml-2">Read more</button>
                                 @endif
                                 
-                                @component('components.promptbook.LikesAndFavorites', ['user' => $user])
+                                @component('components.promptbook.like-and-favorites', ['user' => $user])
                                 @endcomponent
                             @endif
                         </p>
                         
                         <p class="font-thin text-[0.75rem] mt-1 text-[#a48ece]">{{ date_format($user->created_at, 'M d, Y') }}</p>
-                        @component('components.promptbook.CommentSection', ['user' => $user])
+                        @component('components.promptbook.comment-section', ['user' => $user])
                         @endcomponent    
                               
                     </div>
                     @endforeach
                 </div>
                 
-                @component('components.promptbook.Pagination', ['users' => $users])
+                @component('components.promptbook.pagination', ['users' => $users])
                 @endcomponent
         @endif
     </section>
