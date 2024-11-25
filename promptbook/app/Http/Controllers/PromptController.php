@@ -10,9 +10,37 @@ use App\Http\Requests\StorePromptRequest;
 use App\Http\Requests\EditPromptRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PromptController extends Controller
 {
+    public function searchByTitle(Request $request)
+    {
+        Log::info('Search request received:', ['query' => $request->input('query')]);
+    
+        $query = strtolower($request->input('query'));
+        $keywords = explode(' ', $query);
+        
+        // putting the query in a loop to that we can check for each word seperatetly 
+        // and using DB::raw so that we can use the SQL lower function
+        $prompts = DB::table('prompts')
+            ->where(function ($q) use ($keywords) {
+                foreach ($keywords as $word) {
+                    $q->orWhere(DB::raw('LOWER(title)'), 'LIKE', "%{$word}%")
+                      ->orWhere(DB::raw('LOWER(description)'), 'LIKE', "%{$word}%");
+                }
+            })
+            ->where('user_id', '!=', Auth::id())
+            ->get();
+    
+        Log::info('Search results:', ['results' => $prompts]);
+    
+        return response()->json(['prompts' => $prompts]);
+    }
+    
+
+
+
     public function toggleLike($id)
     {
         $user = Auth::id();
@@ -103,6 +131,24 @@ class PromptController extends Controller
             $prompt->favorited = $prompt->favorites->contains('user_id', Auth::id());
             unset($prompt->likes);
             unset($prompt->favorites);
+            return $prompt;
+        });
+
+        return response()->json($prompts);
+    }
+
+
+    public function allFavoritedPrompts()
+    {
+        $prompts = Prompt::with(['user', 'likes', 'favorites'])
+                    ->whereHas('favorites', function ($query) {
+                        $query->where('user_id', Auth::id());
+                    })
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
+
+        $prompts->getCollection()->transform(function ($prompt) {
+            $prompt->liked = $prompt->likes->contains('user_id', Auth::id());
             return $prompt;
         });
 
