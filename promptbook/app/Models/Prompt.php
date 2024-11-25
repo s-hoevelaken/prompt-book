@@ -22,7 +22,7 @@ class Prompt extends Model
         return $this->hasMany(Like::class);
     }
 
-    public function favourites()
+    public function favorites()
     {
         return $this->hasMany(Favorite::class);
     }
@@ -34,10 +34,8 @@ class Prompt extends Model
 
     public function isFavouritedBy($userId)
     {
-        return $this->favourites()->where('user_id', $userId)->exists();
+        return $this->favorites()->where('user_id', $userId)->exists();
     }
-
-
 
     public function comments()
     {
