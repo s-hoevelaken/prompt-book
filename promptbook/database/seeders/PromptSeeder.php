@@ -14,6 +14,7 @@ class PromptSeeder extends Seeder
     {
         // run the PromptFactory and creat 20 prompts
         \App\Models\Prompt::factory(20)->create();
+        \App\Models\Comment::factory(20)->create();
 
         // command to run the seeder
         // php artisan db:seed --class=PromptSeeder
