@@ -1,5 +1,9 @@
 <?php
 
+/*
+    Contributor: Stephan
+*/
+
 namespace App\Livewire;
 
 use Livewire\Component;

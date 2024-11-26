@@ -1,5 +1,9 @@
 <?php
 
+/*
+    Contributor: Xander
+*/
+
 namespace App\Livewire;
 
 use Livewire\Component;
@@ -28,7 +32,7 @@ class Feedpage extends Component
 
     protected $listeners = ['refreshComments' => '$refresh', 'flashmessage' => 'dismissFlashMessage'];
 
-    
+
     /*
         Dismiss the flash message
     */

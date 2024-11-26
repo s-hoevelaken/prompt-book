@@ -1,5 +1,9 @@
 <?php
 
+/*
+    Contributor: Stephan
+*/
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -97,7 +101,7 @@ class PromptController extends Controller
             'is_public' => $validatedData['is_public']
         ]);
 
-        return redirect()->route('homepage');
+        return to_route('prompts.view');
     }
 
     public function myPrompts()
@@ -202,6 +206,6 @@ class PromptController extends Controller
         $prompt->content = $validatedData['content'];
         $prompt->save();
 
-        return response()->json(['message' => 'Prompt updated successfully.']);
+        return to_route('prompts.view');
     }
 }
