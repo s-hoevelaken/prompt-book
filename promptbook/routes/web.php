@@ -18,6 +18,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('feedpage', Feedpage::class)->name('prompts.feed');
     Route::view('profile', 'profile')->name('profile');
 
+    Route::get('/prompts/edit/{id}', [PromptController::class, 'edit'])->name('prompts.edit');
+
     // search test
     Route::prefix('search-prompts')->group(function () {
         Route::view('/view', 'search-prompts')->name('search.prompts.view');
@@ -30,11 +32,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // update routes
 Route::middleware('auth')->group(function () {
     Route::prefix('prompts')->group(function () {
-        Route::post('store', [PromptController::class, 'store'])->name('prompts.store');
-        Route::post('/{id}/like', [PromptController::class, 'toggleLike']);
-        Route::post('/{id}/save', [PromptController::class, 'toggleFavorite']);
-        Route::put('/{id}', [PromptController::class, 'update'])->name('prompts.update');
-        Route::delete('/{id}', [PromptController::class, 'destroy']);   
+        Route::post('/store', [PromptController::class, 'store'])->name('prompts.store');
+        Route::put('/update/{id}', [PromptController::class, 'update'])->name('prompts.edit');
+        Route::delete('/delete/{id}', [PromptController::class, 'destroy'])->name('prompt.destroy');   
     });
 });
 

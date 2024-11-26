@@ -30,10 +30,18 @@ class PromptController extends Controller
                       ->orWhere(DB::raw('LOWER(description)'), 'LIKE', "%{$word}%");
                 }
             })
-            ->where('user_id', '!=', Auth::id())
+            ->where(function ($q) {
+                $q->where('is_public', 1)
+                  ->orWhere('user_id', Auth::id());
+            })
             ->get();
-    
-        Log::info('Search results:', ['results' => $prompts]);
+
+        if ($prompts->isEmpty()) {
+            return response()->json([
+                'prompts' => [],
+                'message' => 'No prompts found'
+            ]);
+        }
     
         return response()->json(['prompts' => $prompts]);
     }
@@ -85,9 +93,6 @@ class PromptController extends Controller
         }
 
         $validatedData = $request->validated();
-        $validatedData['content'] = clean($validatedData['content']);
-        $validatedData['description'] = clean($validatedData['description']);
-
 
         $prompt = Prompt::create([
             'user_id' => Auth::id(),
@@ -160,6 +165,15 @@ class PromptController extends Controller
     {
         $prompt = Prompt::where('id', $id)->where('user_id', Auth::id())->first();
 
+
+        if (!$prompt) {
+            return response()->json(['error' => 'Prompt not found.'], 404);
+        }
+
+        if (Auth::id() !== $prompt->user_id) {
+            abort(403, 'You do not have permission to modify this prompt.');
+        }
+    
         if (!$prompt) {
             return response()->json(['error' => 'Prompt not found or access denied.'], 404);
         }
