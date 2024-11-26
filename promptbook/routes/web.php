@@ -16,7 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('viewpage', Viewpage::class)->name('prompts.view');
 
     Route::get('feedpage', Feedpage::class)->name('prompts.feed');
-
+    
     Route::view('profile', 'profile')->name('profile');
 
     // results route
