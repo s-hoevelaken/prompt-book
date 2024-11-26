@@ -27,7 +27,7 @@ class SearchPromptTest extends TestCase
         $response = $this->actingAs($user)->get(route('search.prompts.results', ['query' => 'Learn']));
     
         // Debugging: Log response content to troubleshoot inconsistencies
-        dump($response->getContent());
+
     
         // Assert: Check if the response is successful (e.g., 200 OK)
         $response->assertStatus(200);

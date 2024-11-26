@@ -37,5 +37,21 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+// test routes
+Route::middleware('auth')->group(function () {
+    Route::prefix('prompts')->group(function () {
+        Route::get('/my-prompts', [PromptController::class, 'myPrompts']);
+        Route::get('/all-prompts', [PromptController::class, 'allPrompts']);
+        Route::get('/favorited-prompts', [PromptController::class, 'allFavoritedPrompts']);
+
+        Route::post('/prompts/{prompt}/favorite', [PromptController::class, 'toggleFavorite'])->name('prompts.toggleFavorite');
+        Route::post('/prompts/{prompt}/like', [PromptController::class, 'toggleLike'])->name('prompts.toggleLike');
+        Route::delete('/prompts/{prompt}', [PromptController::class, 'destroy'])->name('prompts.destroy');
+        Route::put('/prompts/{prompt}/toggle-publicity', [PromptController::class, 'togglePublicity'])->name('prompts.togglePublicity');
+
+        Route::put('/{id}/toggle-publicity', [PromptController::class, 'togglePublicity']);
+    });
+});
+
 
 require __DIR__ . '/auth.php';

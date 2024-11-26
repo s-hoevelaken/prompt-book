@@ -11,6 +11,18 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+        <testsuite name="custom-tests">
+            <file>./tests/Feature/CreatePromptTest.php</file>
+            <file>./tests/Feature/FavoritePromptTest.php</file>
+            <file>./tests/Feature/LikePromptTest.php</file>
+            <file>./tests/Feature/LoginTest.php</file>
+            <file>./tests/Feature/RegisterTest.php</file>
+            <file>./tests/Feature/RemovePromptTest.php</file>
+            <file>./tests/Feature/SearchPrivatePromptTest.php</file>
+            <file>./tests/Feature/SearchPromptTest.php</file>
+            <file>./tests/Feature/TogglePromptPublicityTest.php</file>
+            <file>./tests/Feature/UpdatePromptTest.php</file>
+        </testsuite>
     </testsuites>
     <source>
         <include>
