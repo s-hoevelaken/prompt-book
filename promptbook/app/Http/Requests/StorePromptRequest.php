@@ -1,5 +1,9 @@
 <?php
 
+/*
+    Contributor: Stephan
+*/
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -12,7 +16,7 @@ class StorePromptRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        return true;
     }
 
     /**

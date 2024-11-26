@@ -1,5 +1,9 @@
 <?php
 
+/*
+    Contributor: Stephan
+*/
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -8,7 +12,6 @@ use App\Models\Like;
 use App\Models\Favorite;
 use App\Http\Requests\StorePromptRequest;
 use App\Http\Requests\EditPromptRequest;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -16,13 +19,10 @@ class PromptController extends Controller
 {
     public function searchByTitle(Request $request)
     {
-        Log::info('Search request received:', ['query' => $request->input('query')]);
-    
         $query = strtolower($request->input('query'));
         $keywords = explode(' ', $query);
         
-        // putting the query in a loop to that we can check for each word seperatetly 
-        // and using DB::raw so that we can use the SQL lower function
+
         $prompts = DB::table('prompts')
             ->where(function ($q) use ($keywords) {
                 foreach ($keywords as $word) {
@@ -30,30 +30,18 @@ class PromptController extends Controller
                       ->orWhere(DB::raw('LOWER(description)'), 'LIKE', "%{$word}%");
                 }
             })
-            ->where(function ($q) {
-                $q->where('is_public', 1)
-                  ->orWhere('user_id', Auth::id());
-            })
+            ->where('user_id', '!=', Auth::id())
             ->get();
-
-        if ($prompts->isEmpty()) {
-            return response()->json([
-                'prompts' => [],
-                'message' => 'No prompts found'
-            ]);
-        }
     
         return response()->json(['prompts' => $prompts]);
     }
     
 
-
-
     public function toggleLike($id)
     {
         $user = Auth::id();
 
-        $like = Like::where('prompt_id', operator: $id)->where('user_id', $user)->first();
+        $like = Like::where('prompt_id', $id)->where('user_id', $user)->first();
 
         if ($like) {
             $like->delete();
@@ -66,6 +54,7 @@ class PromptController extends Controller
             return response()->json(['message' => 'Prompt liked successfully.']);
         }
     }
+
 
     public function toggleFavorite($id)
     {
@@ -93,8 +82,11 @@ class PromptController extends Controller
         }
 
         $validatedData = $request->validated();
+        $validatedData['content'] = clean($validatedData['content']);
+        $validatedData['description'] = clean($validatedData['description']);
 
-        $prompt = Prompt::create([
+
+        Prompt::create([
             'user_id' => Auth::id(),
             'title' => $validatedData['title'],
             'description' => $validatedData['description'],
@@ -102,7 +94,7 @@ class PromptController extends Controller
             'is_public' => $validatedData['is_public']
         ]);
 
-        return redirect()->route('homepage');
+        return to_route('prompts.view');
     }
 
     public function myPrompts()
@@ -122,6 +114,7 @@ class PromptController extends Controller
 
         return response()->json($prompts);
     }
+
 
     public function allPrompts()
     {
@@ -165,15 +158,6 @@ class PromptController extends Controller
     {
         $prompt = Prompt::where('id', $id)->where('user_id', Auth::id())->first();
 
-
-        if (!$prompt) {
-            return response()->json(['error' => 'Prompt not found.'], 404);
-        }
-
-        if (Auth::id() !== $prompt->user_id) {
-            abort(403, 'You do not have permission to modify this prompt.');
-        }
-    
         if (!$prompt) {
             return response()->json(['error' => 'Prompt not found or access denied.'], 404);
         }
@@ -188,6 +172,7 @@ class PromptController extends Controller
         ]);
     }
     
+
     public function destroy($id)
     {
         $prompt = Prompt::where('id', $id)->where('user_id', Auth::id())->first();
@@ -201,6 +186,7 @@ class PromptController extends Controller
         return response()->json(['message' => 'Prompt deleted successfully.']);
     }
 
+    
     public function update(EditPromptRequest $request, $id)
     {
         $prompt = Prompt::where('id', $id)->where('user_id', $request->user()->id)->first();
@@ -216,6 +202,6 @@ class PromptController extends Controller
         $prompt->content = $validatedData['content'];
         $prompt->save();
 
-        return response()->json(['message' => 'Prompt updated successfully.']);
+        return to_route('prompts.view');
     }
 }
