@@ -1,5 +1,9 @@
 <?php
 
+/*
+    Contributor: Stephan
+*/
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,5 +23,10 @@ class Favorite extends Model
     public function prompt()
     {
         return $this->belongsTo(Prompt::class);
+    }
+
+    public function comment()
+    {
+        return $this->belongsTo(Comment::class);
     }
 }

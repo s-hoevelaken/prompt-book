@@ -84,8 +84,8 @@
         </section>
         
         
-        <section class="bg-sky-800 w-full h-[110dvh]">
+        {{-- <section class="bg-sky-800 w-full h-[110dvh]">
             
-        </section>
+        </section> --}}
     </main>
 </div>

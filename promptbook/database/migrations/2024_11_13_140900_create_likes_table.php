@@ -1,5 +1,9 @@
 <?php
 
+/*
+    Contributor: Stephan
+*/
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +19,13 @@ return new class extends Migration {
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('prompt_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+            $table->unsignedBigInteger('prompt_id')->nullable();
+            $table->unsignedBigInteger('comment_id')->nullable();
 
-            $table->unique(['user_id', 'prompt_id']);
+            $table->foreign('prompt_id')->references('id')->on('prompts')->onDelete('cascade');
+            $table->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade');
+            
+            $table->timestamps();
         });
     }
 
