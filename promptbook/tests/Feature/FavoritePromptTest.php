@@ -40,6 +40,7 @@ class FavoritePromptTest extends TestCase
     public function test_unauthenticated_user_cannot_favorite_a_prompt()
     {
         // Arrange: Create a prompt
+        $user = User::factory()->create();
         $prompt = Prompt::factory()->create();
 
         // Act: Attempt to favorite the prompt without authentication

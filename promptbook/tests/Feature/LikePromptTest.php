@@ -59,6 +59,7 @@ class LikePromptTest extends TestCase
     public function test_unauthenticated_user_cannot_like_a_prompt()
     {
         // Arrange: Create a prompt
+        $user = User::factory()->create();
         $prompt = Prompt::factory()->create();
 
         // Act: Attempt to like the prompt without authentication

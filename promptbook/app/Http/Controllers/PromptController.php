@@ -53,7 +53,7 @@ class PromptController extends Controller
     {
         $user = Auth::id();
 
-        $like = Like::where('prompt_id', $id)->where('user_id', $user)->first();
+        $like = Like::where('prompt_id', operator: $id)->where('user_id', $user)->first();
 
         if ($like) {
             $like->delete();
