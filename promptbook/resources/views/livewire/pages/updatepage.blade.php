@@ -13,6 +13,7 @@
                 <div class="mt-2 mb-4 h-[2px] bg-black w-[95%] mx-auto"></div>
 
                 <div class="grid grid-cols-1 gap-6 mt-3">
+                    {{-- update title --}}
                     <div class="flex flex-col w-6/7 mx-3 justify-center">
                         <label class="font-bold" for="title">Title:</label>
                         <input class="bg-gray-900 border-0 rounded-md bg-opacity-75 w-3/6 text-white focus:ring-0 h-8 font-semibold valid:border-[2px] valid:border-green-600 group-invalid:border-[2px] group-invalid:border-red-600" type="text" name="title" id="title" required maxlength="55" value="{{ $prompt->title }}">
@@ -21,6 +22,7 @@
                         @enderror
                     </div>
                     
+                    {{-- update description --}}
                     <div class="flex flex-col w-6/7 mx-3 justify-center">
                         <label class="font-bold text-black" for="description">Description:</label>
                         <textarea class="w-5/6 bg-gray-900 bg-opacity-75 text-[0.8rem] focus:ring-0 text-white border-0 rounded-md valid:border-[1.5px] valid:border-green-600 min-h-[5rem] resize-y" name="description" id="description" required>{{ strip_tags($prompt->description) }}</textarea>
@@ -29,7 +31,7 @@
                         @enderror
                     </div>
                     
-                    
+                    {{-- update content --}}
                     <div class="flex flex-col w-6/7 mx-3 justify-center">
                         <label class="font-bold" for="content">Content:</label>
                         <textarea class="w-5/6 bg-gray-900 bg-opacity-75 text-[0.8rem] focus:ring-0  text-white border-0 rounded-md valid:border-[1.5px] valid:border-green-600" name="content" id="content" required>{{ strip_tags($prompt->content) }}</textarea>
@@ -38,6 +40,7 @@
                         @enderror
                     </div>
                     
+                    {{-- toggle publicity --}}
                     <div class="flex flex-row-reverse w-6/7 mx-4 justify-end gap-2 items-center ">
                         <label class="font-thin text-[0.9rem] mb-[0.1rem] text-teal-500" for="is_public">make prompt public</label>
                         <input class="bg-gray-900 border-0 rounded-md focus:ring-0 focus:border-0 focus:outline-none text-cyan-600 bg-opacity-75 w-5 h-5" type="checkbox" name="is_public" id="is_public">

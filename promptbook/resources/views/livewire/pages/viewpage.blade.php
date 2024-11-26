@@ -9,6 +9,7 @@
 
                 <div class="border-r-[1.5px] border-white w-2 h-12"></div>
 
+                {{-- create new prompt --}}
                 <button class="flex flex-row items-center justify-center gap-1 p-2 bg-green-600 rounded-md w-3/4 ml-3 h-12">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-lg font-extrabold" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
@@ -18,7 +19,7 @@
             </div>
 
             <div class="w-2/4 ml-auto grid grid-cols-5 items-center gap-3">
-                {{-- search prompt --}}
+                {{-- search options --}}
                 <form action="" class="col-span-3">
                     <input 
                         class="border-[1.5px] border-indigo-700 rounded-md bg-gray-800 bg-opacity-40 w-full" 
@@ -74,13 +75,16 @@
                                     </button>
                                 </div>
                             </div>
+                            {{-- publicity --}}
                             @if ($prompt->is_public == 1)
                                 <p class="text-indigo-400 text-[0.8rem]">public</p>
                             @else
                                 <p class="text-indigo-400 text-[0.8rem]">private</p>
                             @endif
                         </div>
+
                         <p class="font-thin text-[0.8rem] whitespace-normal text-wrap truncate">
+                            {{-- expand description area --}}
                             @if (isset($expandedDescriptions[$prompt->id]))
                                 {{ $prompt->description }}
                                 <button wire:click="toggleDescription({{ $prompt->id }})" class="text-indigo-400 ml-2">Show less</button>
@@ -89,7 +93,10 @@
                                 <button wire:click="toggleDescription({{ $prompt->id }})" class="text-indigo-400 ml-2">Read more</button>
                             @endif
                         </p>
+
                         <p class="font-thin text-[0.8rem]">{{ $prompt->content}}</p>
+
+                        {{-- likes and favorites --}}
                         <p class="text-[0.7rem] text-gray-200 mt-1 flex flex-row items-center gap-2 w-[30%]">
                             <span>total likes {{ $prompt->likes->count() }}</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-hand-thumbs-up ml-auto" viewBox="0 0 16 16">
@@ -106,6 +113,7 @@
                     </div>
                 @endforeach
             </div>
+            {{-- pagination --}}
             <div class="my-8">
                 {{ $prompts->links('vendor.pagination.tailwind') }}
             </div>
@@ -113,8 +121,12 @@
     </section>
 
     @if ($flashMessage && $isMessageVisible)
-        <div class="text-green-500 text-sm absolute right-2 bottom-4 transform -translate-x-1/2 bg-white p-3 shadow-md rounded-md z-10" wire:click="dismissFlashMessage">
+        <div 
+            class="text-green-500 text-sm absolute right-2 bottom-4 transform bg-white p-3 shadow-md rounded-md font-bold z-10 transition-transform duration-300 ease-out"
+            wire:click="dismissFlashMessage"
+            x-show="isMessageVisible">
             {{ $flashMessage }}
         </div>
     @endif
+
 </main>

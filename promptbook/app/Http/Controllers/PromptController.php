@@ -12,7 +12,6 @@ use App\Models\Like;
 use App\Models\Favorite;
 use App\Http\Requests\StorePromptRequest;
 use App\Http\Requests\EditPromptRequest;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -20,13 +19,10 @@ class PromptController extends Controller
 {
     public function searchByTitle(Request $request)
     {
-        Log::info('Search request received:', ['query' => $request->input('query')]);
-    
         $query = strtolower($request->input('query'));
         $keywords = explode(' ', $query);
         
-        // putting the query in a loop to that we can check for each word seperatetly 
-        // and using DB::raw so that we can use the SQL lower function
+
         $prompts = DB::table('prompts')
             ->where(function ($q) use ($keywords) {
                 foreach ($keywords as $word) {
@@ -37,13 +33,9 @@ class PromptController extends Controller
             ->where('user_id', '!=', Auth::id())
             ->get();
     
-        Log::info('Search results:', ['results' => $prompts]);
-    
         return response()->json(['prompts' => $prompts]);
     }
     
-
-
 
     public function toggleLike($id)
     {
@@ -62,6 +54,7 @@ class PromptController extends Controller
             return response()->json(['message' => 'Prompt liked successfully.']);
         }
     }
+
 
     public function toggleFavorite($id)
     {
@@ -93,7 +86,7 @@ class PromptController extends Controller
         $validatedData['description'] = clean($validatedData['description']);
 
 
-        $prompt = Prompt::create([
+        Prompt::create([
             'user_id' => Auth::id(),
             'title' => $validatedData['title'],
             'description' => $validatedData['description'],
@@ -121,6 +114,7 @@ class PromptController extends Controller
 
         return response()->json($prompts);
     }
+
 
     public function allPrompts()
     {
@@ -178,6 +172,7 @@ class PromptController extends Controller
         ]);
     }
     
+
     public function destroy($id)
     {
         $prompt = Prompt::where('id', $id)->where('user_id', Auth::id())->first();
@@ -191,6 +186,7 @@ class PromptController extends Controller
         return response()->json(['message' => 'Prompt deleted successfully.']);
     }
 
+    
     public function update(EditPromptRequest $request, $id)
     {
         $prompt = Prompt::where('id', $id)->where('user_id', $request->user()->id)->first();

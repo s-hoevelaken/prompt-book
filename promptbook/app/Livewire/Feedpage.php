@@ -48,7 +48,7 @@ class Feedpage extends Component
     public function addComment($promptId)
     {
         $this->validate([
-            'newComment' => 'required|max:100',
+            'newComment' => 'required|max:100|min:1',
         ]);
 
         $prompt = Prompt::find($promptId);
@@ -137,13 +137,12 @@ class Feedpage extends Component
     public function toggleCommentLike($commentId)
     {
         $comment = Comment::find($commentId);
+        $like = $comment->likes()->where('user_id', Auth::id())->first();
 
         if (!$comment) {
             session()->flash('error', 'Comment not found.');
             return;
         }
-
-        $like = $comment->likes()->where('user_id', Auth::id())->first();
 
         if ($like) {
             $like->delete();
@@ -157,13 +156,12 @@ class Feedpage extends Component
     public function toggleCommentFavourite($commentId)
     {
         $comment = Comment::find($commentId);
+        $favourite = $comment->favorites()->where('user_id', Auth::id())->first();
 
         if (!$comment) {
             session()->flash('error', 'Comment not found.');
             return;
         }
-
-        $favourite = $comment->favorites()->where('user_id', Auth::id())->first();
 
         if ($favourite) {
             $favourite->delete();
@@ -181,21 +179,12 @@ class Feedpage extends Component
     #[Title('Prompts feed page')]
     public function render()
     {
-        $query = Prompt::query()
+        $prompts = Prompt::query()
             ->with(['user', 'comments.user'])
-            ->where('title', 'like', '%' . $this->search . '%');
-
-        if ($this->filter === 'likes') {
-            $query->whereHas('likes', function ($query) {
-                $query->where('user_id', Auth::id());
-            });
-        } elseif ($this->filter === 'favorites') {
-            $query->whereHas('favorites', function ($query) {
-                $query->where('user_id', Auth::id());
-            });
-        }
-
-        $prompts = $query->orderBy('created_at', 'desc')->paginate($this->pagination);
+            ->where('title', 'like', '%' . $this->search . '%')
+            ->applyFilter($this->filter) 
+            ->orderBy('created_at', 'desc')
+            ->paginate($this->pagination);
 
         return view('livewire.pages.feedpage', [
             'users' => $prompts,

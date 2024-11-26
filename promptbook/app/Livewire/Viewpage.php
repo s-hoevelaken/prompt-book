@@ -27,17 +27,26 @@ class Viewpage extends Component
 
     protected $listeners = ['flashmessage' => 'dismissFlashMessage'];
 
+    /*
+        Initialize the user
+    */
     public function mount()
     {
         $this->user_id = Auth::id();
     }
 
+    /*
+        dissmis the flash message
+    */
     public function dismissFlashMessage()
     {
         $this->isMessageVisible = false;
     }
 
 
+    /*
+        Toggle the description
+    */
     public function toggleDescription($id)
     {
         if (isset($this->expandedDescriptions[$id])) {
@@ -52,40 +61,28 @@ class Viewpage extends Component
     public function render()
     {
         $query = Prompt::where('user_id', $this->user_id)
-        ->where('title', 'like', '%' . $this->search . '%');
-        
-        switch ($this->state) {
-            case 'old-date':
-                $query->orderBy('created_at', 'asc');
-                break;
-                case 'total-likes':
-                $query->orderBy('likes', 'desc');
-                break;
-            default:
-            $query->orderBy('created_at', 'desc');
-            break;
-        }
-        
+            ->where('title', 'like', '%' . $this->search . '%')
+            ->applyOrdering($this->state);
+    
         $prompts = $query->paginate($this->pagination)
-        ->through(function ($prompt) {
-            $prompt->description = strip_tags($prompt->description);
+            ->through(function ($prompt) {
+                $prompt->description = strip_tags($prompt->description);
                 $prompt->content = strip_tags($prompt->content);
                 return $prompt;
             });
-
+    
         return view('livewire.pages.viewpage', [
             'prompts' => $prompts
         ])->layout('layouts.app');
     }
+    
 
 
     #[Title('Update your Prompt')]
     public function edit($promptId)
     {
         $prompt = Prompt::find($promptId);
-
-
-        // return the updatepage view with the app layout when it isnt a render method
+        
         return view('livewire.pages.updatepage', [
             'prompt' => $prompt
         ])->layout('layouts.app');

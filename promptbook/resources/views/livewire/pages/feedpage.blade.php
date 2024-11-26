@@ -4,9 +4,10 @@
     {{-- header section --}}
     <section class="sm:w-[85%] sm:h-16 mt-20 mx-auto">
         <div class="flex flex-col my-8 justify-center text-white items-center h-full w-full gap-6">
-            <h1 class="font-bold text-2xl max-w-[50%] text-center">A list of the best online prompts to make your ai even better then it already is</h1>
-            <div class="w-[40%]">
-                <form action="" class="flex items-center gap-4 w-full">
+            <h1 class="font-bold text-2xl sm:max-w-[50%] max-w-[75%] text-center">A list of the best online prompts to make your ai even better then it already is</h1>
+            <div class="sm:w-[40%] w-[60%]">
+                <form action="" class="flex sm:flex-row flex-col items-center gap-4 w-full">
+                    {{-- filtering options --}}
                     <input 
                         class="border-[1.5px] border-indigo-700 rounded-md bg-gray-800 bg-opacity-40 w-full focus:ring-0 focus:outline-none focus:border-indigo-400 focus:border-[1.5px] transition-all duration-300 ease-in-out" 
                         type="search" 
@@ -33,7 +34,7 @@
                 <p class="text-[0.8rem]">Create a new prompt to get started</p>
             </div>
         @else
-            <div class="w-full grid sm:grid-cols-4 grid-cols-2 place-content-center place-items-center gap-8 items-start mx-auto">
+            <div class="sm:w-full w-[75%] grid sm:grid-cols-4 grid-cols-1 place-content-center place-items-center gap-8 items-start mx-auto">
                 @foreach ($users as $user)
                     <div class="w-full prompt-card-bg p-3 rounded-md h-auto overflow-y-scroll max-h-52 shadow-md shadow-purple-700 hover:scale-[1.025] transition-all duration-300 ease-in-out">
                         <div class="flex flex-col items-start justify-start leading-5 mb-3">
@@ -42,31 +43,32 @@
                         </div>
                         
                         <p class="font-thin text-[0.8rem]">
+                            {{-- expand description --}}
                             @if (isset($expandedDescriptions[$user->id]))
-                                {{ $user->description }}
-                                <button wire:click="toggleDescription({{ $user->id }})" class="text-indigo-400 ml-2">Show less</button>
+                                {{ $user->description }} <button wire:click="toggleDescription({{ $user->id }})" class="text-indigo-400 ml-2">Show less</button>
                             @else
                                 {{ Str::limit($user->description, 50) }}
-
                                 @if (strlen($user->description) > 50)
                                     <button wire:click="toggleDescription({{ $user->id }})" class="text-indigo-400 ml-2">Read more</button>
                                 @endif
                                 
+                                {{-- add likes and favorites --}}
                                 @component('components.promptbook.like-and-favorites', ['user' => $user])
                                 @endcomponent
                             @endif
                         </p>
-                        
                         <p class="font-thin text-[0.75rem] mt-1 text-[#a48ece]">{{ date_format($user->created_at, 'M d, Y') }}</p>
+                        
+                        {{-- comment section --}}
                         @component('components.promptbook.comment-section', ['user' => $user])
                         @endcomponent    
-                              
                     </div>
                     @endforeach
                 </div>
                 
-                @component('components.promptbook.pagination', ['users' => $users])
-                @endcomponent
+            {{-- pagination --}}
+            @component('components.promptbook.pagination', ['users' => $users])
+            @endcomponent
         @endif
     </section>
 
