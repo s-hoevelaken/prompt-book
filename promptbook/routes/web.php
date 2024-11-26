@@ -7,8 +7,8 @@ use App\Livewire\Homepage;
 use App\Livewire\Creationpage;
 use App\Livewire\Viewpage;
 use App\Livewire\Feedpage;
-
 Route::view('/', 'welcome');
+
 
 // view routes
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -17,42 +17,41 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('viewpage', Viewpage::class)->name('prompts.view');
     Route::get('feedpage', Feedpage::class)->name('prompts.feed');
     Route::view('profile', 'profile')->name('profile');
+
+    Route::get('/prompts/edit/{id}', [PromptController::class, 'edit'])->name('prompts.edit');
+
+    // search test
+    Route::prefix('search-prompts')->group(function () {
+        Route::view('/view', 'search-prompts')->name('search.prompts.view');
+        Route::get('/results', [PromptController::class, 'searchByTitle'])->name('search.prompts.results');
+    });
 });
 
 
-// search routes
-Route::view('/search-prompts', 'search-prompts')->middleware('auth')->name('search.prompts.view');
-Route::get('/search-prompts-results', [PromptController::class, 'searchByTitle'])->middleware('auth')->name('search.prompts.results');
 
 // update routes
 Route::middleware('auth')->group(function () {
-    Route::post('/prompts', [PromptController::class, 'store'])->name('prompts.store');
-    Route::put('/prompts/{id}', [PromptController::class, 'update'])->name('prompts.update');
-    Route::delete('/prompts/{id}', [PromptController::class, 'destroy'])->name('prompts.destroy');
-    
-    Route::post('/prompts/{id}/like', [PromptController::class, 'toggleLike'])->name('prompts.toggleLike');
-    Route::post('/prompts/{id}/save', [PromptController::class, 'toggleFavorite'])->name('prompts.toggleFavorite');
+    Route::prefix('prompts')->group(function () {
+        Route::post('/store', [PromptController::class, 'store'])->name('prompts.store');
+        Route::put('/update/{id}', [PromptController::class, 'update'])->name('prompts.edit');
+        Route::delete('/delete/{id}', [PromptController::class, 'destroy'])->name('prompt.destroy');   
+    });
 });
 
 
 // test routes
 Route::middleware('auth')->group(function () {
-    Route::get('/prompts/my-prompts', [PromptController::class, 'myPrompts']);
-    Route::get('/prompts/all-prompts', [PromptController::class, 'allPrompts']);
-    Route::put('/prompts/{id}/toggle-publicity', [PromptController::class, 'togglePublicity'])->name('prompts.togglePublicity');
+    Route::prefix('prompts')->group(function () {
+        Route::get('/my-prompts', [PromptController::class, 'myPrompts']);
+        Route::get('/all-prompts', [PromptController::class, 'allPrompts']);
+        Route::get('/favorited-prompts', [PromptController::class, 'allFavoritedPrompts']);
+        Route::put('/{id}/toggle-publicity', [PromptController::class, 'togglePublicity']);
+    });
 });
 
 
-// testing routes 
+// retrieval testing
 Route::view('/testing-prompt-retrieval', 'testing-prompt-retrieval');
-    
 
-
-
-Route::middleware('auth')->group(function () {
-    Route::get('/prompts/my-prompts', [PromptController::class, 'myPrompts']);
-    Route::get('/prompts/favorited-prompts', [PromptController::class, 'allFavoritedPrompts']);
-    Route::get('/prompts/all-prompts', [PromptController::class, 'allPrompts']);
-});
 
 require __DIR__ . '/auth.php';

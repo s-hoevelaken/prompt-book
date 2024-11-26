@@ -24,7 +24,7 @@
             <div class="absolute inset-0 bg-gradient-to-r opacity-70 from-gray-800 via-[#0e3086cc] to-[#7c72a7cc] z-2"></div>
 
             <div class="sm:grid flex flex-col sm:grid-cols-3 sm:gap-4 gap-8 sm:place-content-center sm:place-items-center justify-center items-center sm:w-[90%] w-[80%] mx-auto h-full sm:h-full z-10">
-                <div class="bg-black text-white rounded-xl sm:h-[60%] h-[50vh] sm:w-[80%] w-[90%] z-10 grid grid-cols-1 grid-rows-5">
+                <div class="bg-black text-white rounded-xl sm:h-[60%] h-[50vh] sm:w-[80%] w-[90%] z-10 grid grid-cols-1 grid-rows-5 shadow-md shadow-black  hover:scale-[1.025] transition-all duration-300 ease-in-out">
                     <div class="relative row-span-3 overflow-hidden">
                         <img class="h-full w-full object-cover rounded-t-2xl" src="https://th.bing.com/th/id/OIP.V9B6C-vBjOXvhsmoL9kBKgHaHa?w=2000&h=2000&rs=1&pid=ImgDetMain" alt="">
                         <div class="absolute inset-0 bg-green-600 opacity-20"></div>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <div class="bg-black text-white rounded-xl sm:h-[60%] h-[50vh] sm:w-[80%] w-[90%] z-10 grid grid-cols-1 grid-rows-5">
+                <div class="bg-black text-white rounded-xl sm:h-[60%] h-[50vh] sm:w-[80%] w-[90%] z-10 grid grid-cols-1 grid-rows-5 shadow-md shadow-black  hover:scale-[1.025] transition-all duration-300 ease-in-out">
                     <div class="relative row-span-3 overflow-hidden">
                         <img class="h-full w-full object-cover rounded-t-2xl" src="https://www.wpexplorer.com/wp-content/uploads/stockphotos-from-bigstock.jpg" alt="">
                         <div class="absolute inset-0 bg-blue-600 opacity-20"></div>
@@ -62,7 +62,7 @@
                     </div>
                 </div>
 
-                <div class="bg-black text-white rounded-xl sm:h-[60%] h-[50vh] sm:w-[80%] w-[90%] z-10 grid grid-cols-1 grid-rows-5">
+                <div class="bg-black text-white rounded-xl sm:h-[60%] h-[50vh] sm:w-[80%] w-[90%] z-10 grid grid-cols-1 grid-rows-5 shadow-md shadow-black hover:scale-[1.025] transition-all duration-300 ease-in-out">
                     <div class="relative row-span-3 overflow-hidden">
                         <img class="h-full w-full object-cover rounded-t-2xl" src="https://media.istockphoto.com/photos/social-media-picture-id1187661304?k=6&m=1187661304&s=170667a&w=0&h=8sIJhVynLiUTFi1ez0FO5cOchOL2jJDkbcQZb2EgQz8=" alt="">
                         <div class="absolute inset-0 bg-orange-600 opacity-20"></div>

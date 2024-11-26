@@ -2,31 +2,28 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Prompt;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Prompt>
+ */
 class PromptFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = Prompt::class;
-
-    /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'title' => $this->faker->sentence,
+            // use user_id of users that exist in the database
+            'user_id' => User::inRandomOrder()->first()->id,
+            'title' => $this->faker->title . ' ' . $this->faker->name,
             'description' => $this->faker->paragraph,
-            'content' => $this->faker->paragraphs(3, true),
+            'content' => $this->faker->text,
             'is_public' => $this->faker->boolean,
-            'user_id' => \App\Models\User::factory(),
         ];
     }
 }
