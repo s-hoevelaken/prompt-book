@@ -75,4 +75,24 @@ Make sure that your database is configured in the `.env` file and that your test
 
 After you have finished the above steps, you can now access the application on your browser by visiting `http://localhost:8000`:
 
-<img src="/docs/assets/images/homepage.png" alt="homepage" width="100%"/>
+<div style="display: flex">
+    <img src="/docs/assets/images/homepage.png" alt="homepage" width="100%"/>
+    <img src="/docs/assets/images/feedpage.png" alt="homepage" width="100%"/>
+</div>
+
+</br>
+
+## Contributors
+
+![Xander Poggenklaas](https://img.shields.io/badge/Xander_Poggenklaas-Developer-blue)
+![Stephan Hoevelaken](https://img.shields.io/badge/Stephan_Hoevelaken-Developer-red)
+
+
+[<img src="https://github.com/Xander172006.png" width="65px" height="65px" style="border-radius: 50px"/>](Xander172006)
+[<img src="https://github.com/s-hoevelaken.png" width="65px" height="65px" style="border-radius: 50px"/>](s-hoevelaken)
+
+
+**Location:** Bit Academy, Amsterdam
+</br>
+**Linkedin:** [Xander Poggenklaas](<https://www.linkedin.com/in/xander-poggenklaas-835170272/>)
+**Linkedin:** [Stephan Hoevelaken](<https://www.linkedin.com/in/stephan-hoevelaken-4485a1295/>)
