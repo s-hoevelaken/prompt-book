@@ -75,4 +75,4 @@ Make sure that your database is configured in the `.env` file and that your test
 
 After you have finished the above steps, you can now access the application on your browser by visiting `http://localhost:8000`:
 
-<img src="/storage/assets/images/homepage.png" alt="homepage" width="100%"/>
+<img src="/docs/assets/images/homepage.png" alt="homepage" width="100%"/>
