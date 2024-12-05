@@ -12,6 +12,9 @@ class CreatePromptTest extends TestCase
 {
     use RefreshDatabase;
 
+    /*
+        A user can create a prompt with valid data
+    */
     public function test_a_user_can_create_a_prompt()
     {
         // Arrange: Create a user and define valid prompt data
@@ -38,6 +41,10 @@ class CreatePromptTest extends TestCase
         ]);
     }
 
+
+    /*
+        A user can not create a prompt with invalid data
+    */
     public function test_invalid_data_fails_validation()
     {
         // Arrange: Define invalid prompt data

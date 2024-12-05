@@ -10,10 +10,10 @@ use App\Models\Prompt;
 
 class SearchPromptTest extends TestCase
 {
-    use RefreshDatabase; // This will ensure each test starts with a fresh database
+    use RefreshDatabase;
 
-    /**
-     * Test that a user can search for prompts by title.
+    /*
+        Test that a user can search for prompts by title.
      */
     public function test_user_can_search_prompts_by_title()
     {
@@ -25,9 +25,6 @@ class SearchPromptTest extends TestCase
     
         // Act: Search for prompts with a specific keyword
         $response = $this->actingAs($user)->get(route('search.prompts.results', ['query' => 'Learn']));
-    
-        // Debugging: Log response content to troubleshoot inconsistencies
-
     
         // Assert: Check if the response is successful (e.g., 200 OK)
         $response->assertStatus(200);
@@ -41,9 +38,9 @@ class SearchPromptTest extends TestCase
     }
     
 
-    /**
-     * Test that a search with no matches returns an appropriate response.
-     */
+    /*
+        Test that a search with no matches returns an appropriate response.
+    */
     public function test_search_with_no_matches_returns_no_results()
     {
         // Arrange: Create an authenticated user and a few prompts
@@ -61,7 +58,7 @@ class SearchPromptTest extends TestCase
         $response->assertDontSeeText('Introduction to JavaScript');
         $response->assertDontSeeText('Understanding APIs');
 
-        // Optionally: Assert that the response contains a "no results found" message
+        // Assert: Verify that the response contains a "no results found" message
         $response->assertSeeText('No prompts found');
     }
 }

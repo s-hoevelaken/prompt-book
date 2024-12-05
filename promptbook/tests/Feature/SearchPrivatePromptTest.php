@@ -10,18 +10,18 @@ use App\Models\Prompt;
 
 class SearchPrivatePromptTest extends TestCase
 {
-    use RefreshDatabase; // This will ensure each test starts with a fresh database
+    use RefreshDatabase;
 
-    /**
-     * Test that a user cannot search for a private prompt of another user.
-     */
+    /*
+        Test that a user cannot search for a private prompt of another user.
+    */
     public function test_user_cannot_search_private_prompt_of_another_user()
     {
         // Arrange: Create a user and a private prompt belonging to that user
         $owner = User::factory()->create();
         $privatePrompt = Prompt::factory()->create([
             'user_id' => $owner->id,
-            'is_public' => false, // Private prompt
+            'is_public' => false,
             'title' => 'Private Laravel Tutorial'
         ]);
 
@@ -36,8 +36,9 @@ class SearchPrivatePromptTest extends TestCase
         $response->assertDontSee('Private Laravel Tutorial');
     }
 
-    /**
-     * Test that the owner can search for their own private prompt.
+
+    /*
+        Test that the owner can search for their own private prompt.
      */
     public function test_owner_can_search_their_private_prompt()
     {

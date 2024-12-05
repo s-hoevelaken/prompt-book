@@ -8,15 +8,14 @@ use Livewire\Livewire;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-/*
-    To run this test you need to run the following command:
-    php artisan test --filter RegisterTest
-*/
 
 class RegisterTest extends TestCase
 {
     use RefreshDatabase;
 
+    /*
+        A user can register with valid data.
+    */
     #[Test]
     public function a_user_can_register_with_valid_data()
     {

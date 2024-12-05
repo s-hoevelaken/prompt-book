@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Log;
 
 class LikePromptTest extends TestCase
 {
-    use RefreshDatabase; // This will ensure each test starts with a fresh database
+    use RefreshDatabase; 
 
-    /**
-     * Test that an authenticated user can like a prompt.
-     */
+    /*
+        an authenticated user can like a prompt.
+    */
     public function test_authenticated_user_can_like_a_prompt()
     {
         // Arrange: Create a user and a prompt
@@ -34,13 +34,17 @@ class LikePromptTest extends TestCase
             'prompt_id' => $prompt->id,
         ]);
     }
+
+    
+    /*
+        an authenticated user can unlike a prompt.
+    */
     public function test_authenticated_user_can_unlike_a_prompt()
     {
         // Arrange: Create a user and a prompt, and like the prompt
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create();
 
-        // Initially like the prompt
         $this->actingAs($user)->post(route('prompts.toggleLike', $prompt->id));
 
         // Act: Unlike the prompt by sending the toggle request again
@@ -56,6 +60,10 @@ class LikePromptTest extends TestCase
         ]);
     }
 
+
+    /*
+        an unauthenticated user cannot like a prompt.
+    */
     public function test_unauthenticated_user_cannot_like_a_prompt()
     {
         // Arrange: Create a prompt
