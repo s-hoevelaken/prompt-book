@@ -12,6 +12,10 @@ use Tests\TestCase;
 class UpdatePromptTest extends TestCase
 {
     use RefreshDatabase;
+
+    /*
+        Test that a user can update a prompt.
+    */
     public function test_a_user_can_update_a_prompt(): void
     {
         // Arrange: Create a user and a prompt associated with the user
@@ -22,7 +26,6 @@ class UpdatePromptTest extends TestCase
             'content' => '<p>This is the original content</p>',
         ]);
 
-        // Define the updated data
         $updatedPromptData = [
             'title' => 'new updated title',
             'description' => '<p>This is my new prompt</p>',
@@ -43,6 +46,9 @@ class UpdatePromptTest extends TestCase
     }
 
 
+    /* 
+        Test that a user cannot update a prompt that does not belong to them.
+    */
     public function test_invalid_update_data_fails_validation(): void
     {
         // Arrange: Create a user and a prompt associated with the user

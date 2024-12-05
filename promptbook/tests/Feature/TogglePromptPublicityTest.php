@@ -11,9 +11,9 @@ class TogglePromptPublicityTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Test that the creator of the prompt can toggle its publicity.
-     */
+    /*
+        Test that the creator of the prompt can toggle its publicity.
+    */
     public function test_authenticated_user_can_toggle_prompt_publicity()
     {
         $user = User::factory()->create();
@@ -28,9 +28,10 @@ class TogglePromptPublicityTest extends TestCase
         ]);
     }
 
-    /**
-     * Test that an authenticated user who is not the owner cannot toggle the publicity of the prompt.
-     */
+
+    /*
+        Test that an authenticated user who is not the owner cannot toggle the publicity of the prompt.
+    */
     public function test_authenticated_non_owner_cannot_toggle_prompt_publicity()
     {
         // Arrange: Create a prompt owned by user1 and another user (user2)
@@ -51,10 +52,9 @@ class TogglePromptPublicityTest extends TestCase
         ]);
     }
 
-    /**
-     * Test that an unauthenticated user cannot toggle the publicity of the prompt.
-     */
-    
+    /*
+        Test that an unauthenticated user cannot toggle the publicity of the prompt.
+    */
     public function test_unauthenticated_user_cannot_toggle_prompt_publicity()
     {
         // Arrange: Create a prompt owned by user1

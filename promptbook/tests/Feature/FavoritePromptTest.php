@@ -10,10 +10,10 @@ use App\Models\Prompt;
 
 class FavoritePromptTest extends TestCase
 {
-    use RefreshDatabase; // This will ensure each test starts with a fresh database
+    use RefreshDatabase;
 
-    /**
-     * Test that an authenticated user can favorite a prompt.
+    /*
+        an authenticated user can favorite a prompt.
      */
     public function test_authenticated_user_can_favorite_a_prompt()
     {
@@ -34,8 +34,8 @@ class FavoritePromptTest extends TestCase
         ]);
     }
 
-    /**
-     * Test that an unauthenticated user cannot favorite a prompt.
+    /*
+        an unauthenticated user cannot favorite a prompt.
      */
     public function test_unauthenticated_user_cannot_favorite_a_prompt()
     {
@@ -58,8 +58,8 @@ class FavoritePromptTest extends TestCase
         ]);
     }
 
-    /**
-     * Test that an authenticated user can unfavorite a prompt they have already favorited.
+    /*
+        an authenticated user can unfavorite a prompt they have already favorited.
      */
     public function test_authenticated_user_can_unfavorite_a_prompt()
     {
@@ -67,7 +67,6 @@ class FavoritePromptTest extends TestCase
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create();
 
-        // Favorite the prompt first
         $this->actingAs($user)->post(route('prompts.toggleFavorite', $prompt->id));
 
         // Assert: Verify the prompt is favorited in the database

@@ -15,9 +15,9 @@ use App\Models\Prompt;
 
 class RemovePromptTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
+    /*
+        A basic feature test example.
+    */
     public function test_a_user_can_remove_a_prompt()
     {
         $user = User::factory()->create();
@@ -49,7 +49,9 @@ class RemovePromptTest extends TestCase
     }
 
 
-
+    /*
+        A user cannot remove a prompt that does not belong to them.
+    */
     public function test_unauthorized_user_cannot_delete_a_prompt()
     {
         $prompt = Prompt::factory()->create();
@@ -57,9 +59,13 @@ class RemovePromptTest extends TestCase
         $this->withoutMiddleware();
 
         $response = $this->delete(route('prompts.destroy', $prompt->id));
-        $response->assertStatus(403); // Change to 403 since the controller returns 403 for unauthorized access
+        $response->assertStatus(403);
     }
 
+
+    /*
+        An unknown user cannot remove a prompt.
+    */
     public function test_unknown_user_cannot_delete_a_prompt()
     {
         $prompt = Prompt::factory()->create();
