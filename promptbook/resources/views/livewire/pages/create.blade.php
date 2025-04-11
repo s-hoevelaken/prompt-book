@@ -17,12 +17,7 @@
                     
                     <div class="flex flex-col w-6/7 mx-3 justify-center">
                         <label class="font-bold text-black" for="description">Description:</label>
-                        <textarea 
-                            class="w-5/6 bg-gray-900 bg-opacity-75 text-[0.8rem] focus:ring-0 text-white border-0 rounded-md valid:border-[1.5px] valid:border-green-600 min-h-[5rem] resize-y" 
-                            name="description" 
-                            id="description" 
-                            required>
-                        </textarea>
+                        <textarea class="w-5/6 bg-gray-900 bg-opacity-75 text-[0.8rem] focus:ring-0 text-white border-0 rounded-md valid:border-[1.5px] valid:border-green-600 min-h-[5rem] resize-y" name="description" id="description" required></textarea>
                         @error('description')
                             <p class="text-thin text-red-500 text-[0.85rem] mt-1">{{ $message }}</p>
                         @enderror

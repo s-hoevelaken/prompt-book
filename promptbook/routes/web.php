@@ -6,12 +6,19 @@ use App\Livewire\Homepage;
 use App\Livewire\Creationpage;
 use App\Livewire\Viewpage;
 use App\Livewire\Feedpage;
+use App\Livewire\PromptDetails;
+
+Route::get('/', function () {
+    return redirect('/login');
+});
 
 // view routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('homepage', Homepage::class)->name('homepage');
 
     Route::get('creationpage', Creationpage::class)->name('prompts.create');
+
+    Route::get('promptdetails/{prompt}', PromptDetails::class)->name('prompt.show');
 
     Route::get('viewpage', Viewpage::class)->name('prompts.view');
 
