@@ -1,7 +1,7 @@
 <?php
 
 /*
-    Contributor: Stephan
+    Contributor: Xander
 */
 
 use Illuminate\Database\Migrations\Migration;

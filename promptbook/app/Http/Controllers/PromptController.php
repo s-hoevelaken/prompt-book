@@ -14,6 +14,7 @@ use App\Models\Favorite;
 use App\Http\Requests\StorePromptRequest;
 use App\Http\Requests\EditPromptRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 class PromptController extends Controller
@@ -90,17 +91,26 @@ class PromptController extends Controller
 
     public function store(StorePromptRequest $request)
     {
+        Log::info($request);
         if (!Auth::check()) {
             return response()->json(['error' => 'Unauthorized.'], 403);
         }
 
         $validatedData = $request->validated();
+        $filePath = null;
+
+        if ($request->hasFile('content')) {
+            $uploadedFile = $request->file('content');
+            $fileName = time() . '_' . $uploadedFile->getClientOriginalName();
+            $uploadedFile->storeAs('prompts', $fileName, 'local');
+            
+        }
 
         $prompt = Prompt::create([
             'user_id' => Auth::id(),
             'title' => $validatedData['title'],
             'description' => $validatedData['description'],
-            'content' => $validatedData['content'] ?? null,
+            'content' => $filePath,
             'output_format' => $validatedData['output_format'],
             'is_public' => $validatedData['is_public']
         ]);

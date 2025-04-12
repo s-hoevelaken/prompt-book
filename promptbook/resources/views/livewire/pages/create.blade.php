@@ -1,5 +1,5 @@
 <main class="h-5/6 w-full mx-auto ">
-    <form class="rounded-lg bg-zinc-800 flex flex-col sm:w-2/4 max-w-[80%] h-auto my-[5%] grid-rows-2 sm:grid-cols-6 sm:grid-rows-1 place-content-center place-items-center sm:max-w-[40%] mx-auto text-white m-7 shadow-md shadow-black" action="{{ route('prompts.store') }}" method="POST" enctype="multipart/form-data" novalidate>
+    <form class="rounded-lg bg-zinc-800 flex flex-col sm:w-2/4 max-w-[80%] h-auto my-[5%] grid-rows-2 sm:grid-cols-6 sm:grid-rows-1 place-content-center place-items-center sm:max-w-[40%] mx-auto text-white m-7 shadow-md shadow-black" action="{{ route('prompts.store') }}" method="POST" novalidate enctype="multipart/form-data">
         @csrf
         <div class="w-full text-nowrap p-4">
             <h1 class="font-semibold text-xl">Maak een nieuwe Prompt aan</h1>
@@ -77,6 +77,9 @@
                 <p class="text-sm text-zinc-400 font-medium mb-3">Choose any content format like (Markdown, Image, Codeblock)</p>
             </div>
             <div>
+                @error('content')
+                    <p class="text-thin text-red-500 text-[0.85rem] absolute">{{ $message }}</p>
+                @enderror
                 <!-- Hidden file input -->
                 <input 
                     id="file-input"
@@ -84,6 +87,7 @@
                     name="content"
                     accept=".txt, .md, .json, .html, .jpg, .jpeg, .png"
                     class="hidden"
+                    onchange="showFileName(this)"
                 >
                 <!-- Custom styled button -->
                 <label 
@@ -110,5 +114,14 @@
     function hideMaxLength(input) {
         const indicator = input.parentElement.querySelector('#maxlength-indicator');
         indicator.classList.add('hidden');
+    }
+
+    function showFileName(input) {
+        const fileNameSpan = document.getElementById('file-name');
+        if (input.files && input.files[0]) {
+            fileNameSpan.textContent = `Selected file: ${input.files[0].name}`;
+        } else {
+            fileNameSpan.textContent = '';
+        }
     }
 </script>
