@@ -96,9 +96,9 @@ Hier is een overzicht van de merge requests, gekoppeld aan de bijbehorende user 
 ### Screenshot van Merges
 
 #### Xander:
-<img src="./3.6 Versiebeheer/merges/Xander_merges.png">
+<img src="./3.6 Versiebeheer/merges/Xander_merges.png" alt="Xander_merges" width="100%"/>
 
 <br>
 
 #### Stephan:
-<img src="./3.6 Versiebeheer/merges/Stephan_merges.png">
+<img src="./3.6 Versiebeheer/merges/Stephan_merges.png" alt="Stephan_merges" width="100%"/>
