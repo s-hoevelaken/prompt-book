@@ -100,7 +100,8 @@ class PromptController extends Controller
             'user_id' => Auth::id(),
             'title' => $validatedData['title'],
             'description' => $validatedData['description'],
-            'content' => $validatedData['content'],
+            'content' => $validatedData['content'] ?? null,
+            'output_format' => $validatedData['output_format'],
             'is_public' => $validatedData['is_public']
         ]);
 

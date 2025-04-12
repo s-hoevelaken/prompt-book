@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->text('content');
+            $table->string('content')->nullable();
             $table->string('tags')->nullable();
             $table->json('input_schema')->nullable();
             $table->enum('output_format', ['text', 'json', 'html', 'markdown'])->default('text');

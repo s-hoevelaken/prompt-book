@@ -35,6 +35,10 @@ new class extends Component
                     <x-nav-link :href="route('homepage')" :active="request()->routeIs('homepage')" wire:navigate>
                         {{ __('Homepage') }}
                     </x-nav-link>
+                    
+                    <x-nav-link :href="route('prompts.create')" :active="request()->routeIs('prompts.create')" wire:navigate>
+                        {{ __('Create Prompt') }}
+                    </x-nav-link>
                 </div>
             </div>
 

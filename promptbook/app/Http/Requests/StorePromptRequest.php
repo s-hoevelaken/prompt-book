@@ -29,8 +29,8 @@ class StorePromptRequest extends FormRequest
         return [
             'title' => 'required|string|max:55|unique:prompts,title',
             'description' => 'nullable|string|max:500',
-            'content' => 'required|string|min:10|max:1000',
-            'is_public' => 'nullable|boolean'
+            'is_public' => 'nullable|boolean',
+            'output_format' => 'nullable|string|in:json,html,markdown',
         ];
     }
 
@@ -38,8 +38,10 @@ class StorePromptRequest extends FormRequest
     {
         return [
             'title.required' => 'The title field is required.',
+            'title.unique' => 'The title has already been taken.',
             'title.max' => 'The title may not be longer than 55 characters.',
-            'content.required' => 'The content field cannot be empty.',
+            'output_format.in' => 'The output format must be one of the following: json, html, markdown.',
+            'description.max' => 'The description may not be longer than 500 characters.',
         ];
     }
 

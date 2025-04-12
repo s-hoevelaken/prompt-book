@@ -1,49 +1,114 @@
 <main class="h-5/6 w-full mx-auto ">
-    <section class="rounded-3xl sm:w-full max-w-[80%] h-auto grid grid-cols-1 grid-rows-2 sm:grid-cols-6 sm:grid-rows-1 place-content-center place-items-center sm:max-w-[60%] mx-auto text-black m-7">
-        <section class="w-full col-span-3 text-black h-full sm:max-h-[85%] bg-indigo-700 bg-opacity-90 sm:rounded-l-3xl grid grid-cols-1 place-items-center p-5">
-            <form action="{{ route('prompts.store') }}" class="mb-auto w-full" method="POST" novalidate>
-                @csrf
-                <h1 class="text-center text-[1.75rem] font-bold">Create a Prompt</h1>
-                <div class="mt-2 mb-4 h-[2px] bg-black w-[95%] mx-auto"></div>
-
-                <div class="grid grid-cols-1 gap-6 mt-3">
-                    <div class="flex flex-col w-6/7 mx-3 justify-center">
-                        <label class="font-bold" for="title">Title:</label>
-                        <input class="bg-gray-900 border-0 rounded-md bg-opacity-75 w-3/6 text-white focus:ring-0 h-8 font-semibold valid:border-[2px] valid:border-green-600 group-invalid:border-[2px] group-invalid:border-red-600" type="text" name="title" id="title" required maxlength="55">
-                        @error('title')
-                            <p class="text-thin text-red-500 text-[0.85rem] mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    
-                    <div class="flex flex-col w-6/7 mx-3 justify-center">
-                        <label class="font-bold text-black" for="description">Description:</label>
-                        <textarea class="w-5/6 bg-gray-900 bg-opacity-75 text-[0.8rem] focus:ring-0 text-white border-0 rounded-md valid:border-[1.5px] valid:border-green-600 min-h-[5rem] resize-y" name="description" id="description" required></textarea>
-                        @error('description')
-                            <p class="text-thin text-red-500 text-[0.85rem] mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    
-                    
-                    <div class="flex flex-col w-6/7 mx-3 justify-center">
-                        <label class="font-bold" for="content">Content:</label>
-                        <textarea class="w-5/6 bg-gray-900 bg-opacity-75 text-[0.8rem] focus:ring-0  text-white border-0 rounded-md valid:border-[1.5px] valid:border-green-600" name="content" id="content" required></textarea>
-                        @error('content')
-                            <p class="text-thin text-red-500 text-[0.85rem] mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    
-                    <div class="flex flex-row-reverse w-6/7 mx-4 justify-end gap-2 items-center ">
-                        <label class="font-thin text-[0.9rem] mb-[0.1rem] text-teal-500" for="is_public">make prompt public</label>
-                        <input class="bg-gray-900 border-0 rounded-md focus:ring-0 focus:border-0 focus:outline-none text-cyan-600 bg-opacity-75 w-5 h-5" type="checkbox" name="is_public" id="is_public">
-                    </div>
-                    
-                    <button class="bg-gradient-to-r from-blue-600 to-sky-500 max-w-[85%] w-full mx-auto shadow-md p-3 rounded-lg font-bold font-sans mb-5 hover:scale-105 transition-all duration-300 ease-in-out focus:text-white" type="submit">Submit Prompt</button>
+    <form class="rounded-lg bg-zinc-800 flex flex-col sm:w-2/4 max-w-[80%] h-auto my-[5%] grid-rows-2 sm:grid-cols-6 sm:grid-rows-1 place-content-center place-items-center sm:max-w-[40%] mx-auto text-white m-7 shadow-md shadow-black" action="{{ route('prompts.store') }}" method="POST" enctype="multipart/form-data" novalidate>
+        @csrf
+        <div class="w-full text-nowrap p-4">
+            <h1 class="font-semibold text-xl">Maak een nieuwe Prompt aan</h1>
+        </div>
+        <div class="border-b-[1.5px] border-zinc-600 w-full mb-4"></div>
+        
+        <div class="w-[90%] mx-auto mb-1">
+            @error('title')
+                <p class="text-thin text-red-500 text-[0.85rem] absolute">{{ $message }}</p>
+            @enderror
+            <label class="relative text-sm top-7 left-3 text-gray-300 font-medium" for="title-input">Title (required)</label>
+            <div id="maxlength-indicator" class="hidden w-[99%] relative top-[4.5rem] text-xs">
+                <div class="absolute right-0 bottom-0 text-zinc-400">
+                    0/100
                 </div>
-            </form>
-        </section>
+            </div>
+            <input 
+                class="bg-transparent focus:border-[2px] focus:border-white hover:border-white rounded-lg border-[1px] border-zinc-600 focus:outline-none focus:ring-0 w-full h-20 placeholder:text-zinc-500 placeholder:font-normal" 
+                id="title-input"
+                type="text"
+                name="title"
+                placeholder="Add title"
+                maxlength="100"
+                onfocus="showMaxLength(this)"
+                onblur="hideMaxLength(this)"
+            >
+        </div>
 
-        <section class="w-full col-span-3 h-[85%] sm:block hidden">
-            <img class="rounded-r-3xl h-full" src="https://bpic.588ku.com/back_pic/23/03/21/a8755d7036793c3e28de67d5fb2c6952.png" alt="creating-image">
-        </section>
-    </section>
+        <div class="w-[90%] mx-auto mb-5">
+            @error('description')
+                <p class="text-thin text-red-500 text-[0.85rem] absolute">{{ $message }}</p>
+            @enderror
+            <label class="relative text-sm top-7 left-3 text-gray-300 font-medium" for="description-input">Description</label>
+            <div id="maxlength-indicator" class="hidden w-[99%] relative top-[7.5rem] text-xs">
+                <div class="absolute right-0 bottom-0 text-zinc-400">
+                    0/300
+                </div>
+            </div>
+            <input 
+                class="bg-transparent focus:border-[2px] focus:border-white hover:border-white rounded-lg border-[1px] border-zinc-600 focus:outline-none focus:ring-0 items-start text-start align-top w-full h-32 placeholder:relative placeholder:bottom-6 placeholder:text-zinc-500 placeholder:font-normal" 
+                id="description-input"
+                type="text"
+                name="description"
+                placeholder="Add description"
+                maxlength="300"
+                onfocus="showMaxLength(this)"
+                onblur="hideMaxLength(this)"
+            >
+        </div>
+
+        <div class="w-[90%] mx-auto mb-5 flex flex-row justify-start items-center gap-4">
+            <div class="flex items-start justify-start flex-col w-1/4 gap-0">
+                <h1 class="text-nowrap absolute">Publicity and Output Format</h1>
+
+                <label class="text-sm text-zinc-400 font-medium relative top-6 left-3 mt-3" for="publicity-toggle">publicity</label>
+                <select name="is_public" id="" class="bg-transparent focus:border-[2px] focus:border-white hover:border-white rounded-lg border-[1px] border-zinc-600 focus:outline-none focus:ring-0 items-end text-start w-full h-14 " >
+                    <option value="public" class="bg-zinc-800 text-gray-300">Public</option>
+                    <option value="private" class="bg-zinc-800 text-gray-300">Private</option>
+                </select>
+            </div>
+
+            <div class="flex items-start justify-start flex-col w-3/4 gap-0">
+                <label class="text-sm text-zinc-400 font-medium relative top-6 left-3 mt-3" for="publicity-toggle">Output Format</label>
+                <select name="output_format" id="" class="bg-transparent focus:border-[2px] focus:border-white hover:border-white rounded-lg border-[1px] border-zinc-600 focus:outline-none focus:ring-0 items-end text-start w-full h-14 " >
+                    <option value="json" class="bg-zinc-800 text-gray-300">JSON</option>
+                    <option value="markdown" class="bg-zinc-800 text-gray-300">Markdown</option>
+                    <option value="html" class="bg-zinc-800 text-gray-300">HTML</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="w-[90%] mx-auto mb-8 flex flex-col gap-3">
+            <div>
+                <label class="text-md text-gray-300 font-medium" for="file-input">Content (Optional)</label>
+                <p class="text-sm text-zinc-400 font-medium mb-3">Choose any content format like (Markdown, Image, Codeblock)</p>
+            </div>
+            <div>
+                <!-- Hidden file input -->
+                <input 
+                    id="file-input"
+                    type="file"
+                    name="content"
+                    accept=".txt, .md, .json, .html, .jpg, .jpeg, .png"
+                    class="hidden"
+                >
+                <!-- Custom styled button -->
+                <label 
+                    for="file-input" 
+                    class="bg-zinc-500 bg-opacity-30 text-white font-medium py-2 px-4 rounded-3xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out text-center hover:bg-zinc-600"
+                >
+                    Upload File
+                </label>
+                <!-- Display selected file name -->
+                <span id="file-name" class="text-sm text-gray-400 mt-2"></span>
+            </div>
+        </div>
+
+        <button class="bg-gradient-to-r from-blue-600 to-sky-500 max-w-[85%] w-full mx-auto shadow-md p-3 rounded-lg font-bold font-sans mb-5 hover:scale-105 transition-all duration-300 ease-in-out focus:text-white" type="submit">Submit Prompt</button>
+    </from>
 </main>
+
+<script>
+    function showMaxLength(input) {
+        const indicator = input.parentElement.querySelector('#maxlength-indicator');
+        indicator.classList.remove('hidden');
+    }
+
+    function hideMaxLength(input) {
+        const indicator = input.parentElement.querySelector('#maxlength-indicator');
+        indicator.classList.add('hidden');
+    }
+</script>
