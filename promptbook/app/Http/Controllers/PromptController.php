@@ -9,6 +9,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Prompt;
 use App\Models\Like;
+use App\Events\PromptCreated;
 use App\Models\Favorite;
 use App\Http\Requests\StorePromptRequest;
 use App\Http\Requests\EditPromptRequest;
@@ -102,6 +103,8 @@ class PromptController extends Controller
             'content' => $validatedData['content'],
             'is_public' => $validatedData['is_public']
         ]);
+
+        event(new PromptCreated($prompt));
 
         return redirect()->route('homepage');
     }

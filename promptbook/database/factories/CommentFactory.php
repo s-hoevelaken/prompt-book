@@ -23,7 +23,7 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::inRandomOrder()->first()?->id ?? User::factory()->create()->id,
+            // 'user_id' => User::inRandomOrder()->first()?->id ?? User::factory()->create()->id,
             'prompt_id' => Prompt::inRandomOrder()->first()?->id ?? Prompt::factory()->create()->id,
             'content' => $this->faker->text(100),
         ];

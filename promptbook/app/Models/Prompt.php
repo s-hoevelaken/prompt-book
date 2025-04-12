@@ -5,6 +5,7 @@
 */
 
 namespace App\Models;
+use App\Models\Categories;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,18 @@ class Prompt extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'title', 'description', 'content', 'is_public'];
+    protected $fillable = [
+        'user_id', 
+        'category_id',
+        'title',
+        'description',
+        'content',
+        'tags',
+        'input_schema',
+        'output_format',
+        'usage_count',
+        'is_public',
+    ];
 
     /* 
         Prompt belongs to a user
@@ -56,6 +68,15 @@ class Prompt extends Model
     {
         return $this->favorites()->where('user_id', $userId)->exists();
     }
+
+    /* 
+        Prompt has a category
+    */
+    public function categories()
+    {
+        return $this->belongsToMany(Categories::class, 'category_prompt');
+    }
+    
 
 
     /* 

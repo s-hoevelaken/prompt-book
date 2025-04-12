@@ -8,13 +8,13 @@ use Illuminate\View\Component;
 
 class CodeSnippet extends Component
 {
-    public $content;
+    public $prompt;
     /**
      * Create a new component instance.
      */
-    public function __construct($content)
+    public function __construct($prompt)
     {
-        $this->content = $content;
+        $this->prompt = $prompt;
     }
 
     /**
@@ -22,6 +22,6 @@ class CodeSnippet extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.code-snippet');
+        return view('components.promptbook.code-snippet');
     }
 }
