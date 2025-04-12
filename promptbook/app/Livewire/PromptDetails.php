@@ -1,7 +1,12 @@
 <?php
 
+/*
+    Contributor: Xander
+*/
 namespace App\Livewire;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use App\Http\Resources\PromptResource;
 use Livewire\Component;
 use Livewire\Attributes\Title;
@@ -25,6 +30,7 @@ class PromptDetails extends Component
         $categories = $this->prompt->categories()->pluck('name')->toArray();
 
         $this->images = $this->getLocalImagesForCategories($categories);
+        Log::info($this->images);
     }
 
 
@@ -37,15 +43,19 @@ class PromptDetails extends Component
 
     protected function getLocalImagesForCategories($categories)
     {
-        $images = [];
+        $google_key = env('MY_GOOGLE_API_KEY');
+        $search_key = env('GOOGLE_SEARCH_KEY');
+        $data = [];
 
-        foreach ($categories as $category) {
-            $imagePath = public_path("images/categories/{$category}.jpg");
-            if (file_exists($imagePath)) {
-                $images[$category] = asset("images/categories/{$category}.jpg");
+        if ($categories) {
+            foreach($categories as $category) {
+                $images = "https://www.googleapis.com/customsearch/v1?key={$google_key}&cx=$search_key&q={$category}&searchType=image";
+
+                $respone = Http::get($images);
+                $data = json_decode($respone->body(), true);
             }
-        }
 
-        return $images;
+            return $data['items'][0]['link'];
+        }
     }
 }

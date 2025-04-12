@@ -10,14 +10,14 @@
 
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/navbar.js', 'resources/js/flashmessage.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/script.js', 'resources/js/flashmessage.js'])
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('resources/css/style.css') }}">
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen bg-gray-100 dark:bg-zinc-900">
             <livewire:layout.navigation />
 
             <!-- Page Heading -->

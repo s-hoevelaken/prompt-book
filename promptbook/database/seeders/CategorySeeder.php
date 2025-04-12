@@ -1,5 +1,8 @@
 <?php
 
+/*
+    Contributor: Xander
+*/
 namespace Database\Seeders;
 
 use App\Models\Categories;

@@ -1,5 +1,8 @@
 <?php
 
+/*
+    Contributor: Xander
+*/
 namespace App\View\Components;
 
 use Closure;
