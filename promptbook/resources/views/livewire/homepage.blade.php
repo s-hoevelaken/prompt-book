@@ -1,22 +1,48 @@
+@props(['categories'])
 <div>
     <main>
-        <section class="bg-gradient-to-r from-[#0f1e43] to-[#3c326b] w-full h-screen border-b-[1.5px] border-black">
-            <div class="flex sm:flex-row flex-col sm:justify-around justify-around items-center w-[75%] mx-auto h-full p-4 text-white my-0">
-                <div class="sm:flex-1 grid md:grid-cols-1 place-content-start place-items-start items-start sm:h-[50%] sm:max-w-[70%] max-w-[90%] gap-4 ">
-                    <h1 class="sm:text-[2.25rem] text-3xl font-bold">Generate creative prompts with ease for any project.</h1>
+        <section class="bg-gradient-to-r from-indigo-700 via-teal-600 to-sky-500 w-full h-[50vh] border-b-[1.5px] border-black">
+            <div class="flex flex-col justify-center items-center w-[60%] mx-auto h-full">
+                <h1 class="text-white font-bold text-5xl">Creativity is a prompt away</h1>
 
-                    <p class="roboto-medium">A guide to create simplistic and efficient prompts to receive better results.</p>
-                </div>
+                <p class="text-wrap text-white max-w-[50%] font-normal text-xl text-center mt-8">Our web page application provides simplistic and efficient prompts to get the best results from you AI model.</p>
 
-                <div class="relative flex-shrink-0 max-w-[80%] min-w-[40%]">
-                    <div class="absolute inset-0 flex justify-center items-center z-0">
-                        <div class="bg-sky-600 rounded-full w-[160%] h-[100%] shadow-md shadow-black">
+                <form class="sm:w-[75%] w-full mb-1" wire:submit.prevent="updateSearch">
+                    <div class="w-full mt-4 flex justify-center items-center">
+                        <input 
+                            class="border-none shadow-sm shadow-black border-zinc-700 bg-white rounded-3xl w-3/5 placeholder:font-normal placeholder:text-gray-500 text-black font-normal focus:border-none focus:outline-none focus:ring-0" 
+                            type="search" 
+                            wire:model.defer="search" 
+                            placeholder="Search for a prompt"
+                        >
+                        <button 
+                            class="p-3 text-white rounded-r-3xl font-bold font-sans hover:translate-x-2 transition-all duration-300 ease-in-out hover:text-sky-300 focus:text-white align-middle hover:cursor-pointer" 
+                            type="submit">
+                            Search
+                        </button>
                     </div>
-                </div>
-
-                <img class="relative object-cover w-full z-4" src="https://png.pngtree.com/png-vector/20240313/ourmid/pngtree-artificial-intelligence-support-service-png-image_11941915.png" alt="prompt-robot">
-
-                </div>           
+                </form>
+                
+                
+                <ul class="flex flex-wrap gap-2 w-[60%] mt-8">
+                    @foreach ($categories as $category)
+                        <li class="text-white bg-zinc-800 rounded-2xl px-3 py-1 text-center">{{ $category->name }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </section>
+        <section class="bg-gradient-to-r bg-stone-900 w-full h-[50vh] border-b-[1.5px] border-black">
+            <div class="flex flex-col justify-center items-center w-[95%] mx-auto h-full text-white">
+                <ul class="flex flex-wrap gap-6 w-full justify-center mt-8">
+                    @foreach ($categories as $category)
+                        @if($loop->index < 6 && $category->image_url)
+                            <li class="flex flex-col items-center text-nowrap">
+                                <img src="{{ $category->image_url }}" alt="prompt-image-{{ $category->id }}" class=" w-60 h-44 object-cover rounded-md shadow-md shadow-black">
+                                <p>{{ $category->name }}</p>
+                            </li>
+                        @endif
+                    @endforeach
+                </ul>
             </div>
         </section>
 
@@ -88,4 +114,9 @@
             
         </section> --}}
     </main>
+    <script>
+        window.addEventListener('redirect', event => {
+            window.location.href = event.detail.url;
+        });
+    </script>    
 </div>

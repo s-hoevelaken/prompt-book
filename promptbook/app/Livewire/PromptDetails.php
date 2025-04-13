@@ -40,22 +40,4 @@ class PromptDetails extends Component
             'prompt' => new PromptResource($this->prompt),
         ])->layout('layouts.app', ['title' => $this->prompt->title]);
     }
-
-    protected function getLocalImagesForCategories($categories)
-    {
-        $google_key = env('MY_GOOGLE_API_KEY');
-        $search_key = env('GOOGLE_SEARCH_KEY');
-        $data = [];
-
-        if ($categories) {
-            foreach($categories as $category) {
-                $images = "https://www.googleapis.com/customsearch/v1?key={$google_key}&cx=$search_key&q={$category}&searchType=image";
-
-                $respone = Http::get($images);
-                $data = json_decode($respone->body(), true);
-            }
-
-            return $data['items'][0]['link'];
-        }
-    }
 }

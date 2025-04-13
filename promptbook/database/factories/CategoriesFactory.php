@@ -5,6 +5,7 @@
 */
 namespace Database\Factories;
 
+use App\Services\ImageCreatorService;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -36,6 +37,7 @@ class CategoriesFactory extends Factory
         ];
 
         $name = $this->faker->unique()->randomElement($categories);
+        $image = ImageCreatorService::getPexelsImage($name);
 
         return [
             'name' => strtolower($name),
@@ -43,6 +45,7 @@ class CategoriesFactory extends Factory
             'icon' => $this->faker->emoji(),
             'color' => $this->faker->hexColor(),
             'slug' => Str::slug($name),
+            'image_url' => $image ?? $this->faker->imageUrl(640, 480, $name),
             'is_visible' => $this->faker->boolean(80),
         ];
     }

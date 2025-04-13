@@ -91,7 +91,6 @@ class PromptController extends Controller
 
     public function store(StorePromptRequest $request)
     {
-        Log::info($request);
         if (!Auth::check()) {
             return response()->json(['error' => 'Unauthorized.'], 403);
         }
@@ -103,7 +102,7 @@ class PromptController extends Controller
             $uploadedFile = $request->file('content');
             $fileName = time() . '_' . $uploadedFile->getClientOriginalName();
             $uploadedFile->storeAs('prompts', $fileName, 'local');
-            
+            $filePath = 'prompts/' . $fileName;
         }
 
         $prompt = Prompt::create([
