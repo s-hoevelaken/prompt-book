@@ -64,14 +64,4 @@ class Homepage extends Component
             'categories' => $this->categories,
         ])->layout('layouts.app');
     }
-
-    // 'prompts' => \App\Models\Prompt::where('is_public', 1)->latest()->take(5)->get(),
-    // 'trendingPrompts' => \App\Models\Prompt::where('is_public', 1)->orderBy('likes_count', 'desc')->take(5)->get(),
-    // 'recentPrompts' => \App\Models\Prompt::where('is_public', 1)->latest()->take(5)->get(),
-    // 'popularPrompts' => \App\Models\Prompt::where('is_public', 1)->orderBy('views_count', 'desc')->take(5)->get(),
-    // 'likedPrompts' => \App\Models\Prompt::where('is_public', 1)->orderBy('likes_count', 'desc')->take(5)->get(),
-    // 'favoritePrompts' => \App\Models\Prompt::where('is_public', 1)->orderBy('favorites_count', 'desc')->take(5)->get(),
-    // 'userPrompts' => \App\Models\Prompt::where('user_id', auth()->id())->latest()->take(5)->get(),
-    // 'userFavorites' => \App\Models\Favorite::where('user_id', auth()->id())->latest()->take(5)->get(),
-    // 'userLikes' => \App\Models\Like::where('user_id', auth()->id())->latest()->take(5)->get(),
 }
