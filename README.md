@@ -4,7 +4,7 @@
 ![GitHub](https://img.shields.io/github/license/elegantweb/sanitizer?style=flat-square)
 
 
-This is a project used to elaborate for a portfolio. It is a simple online social platform that uses docker to run the application for anyone, withtout running into potential issues. </br>
+This is a collabortation project build by Stephan and Xander for our college Deep-Dive (special) week. It is a simple online social platform that uses docker to run the application for anyone, withtout running into potential issues. </br>
 
 
 ### _Tech stack & files_
