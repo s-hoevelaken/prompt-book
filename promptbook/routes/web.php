@@ -2,15 +2,22 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PromptController;
+use App\Http\Controllers\SearchPromptController;
 use App\Livewire\Homepage;
 use App\Livewire\Creationpage;
 use App\Livewire\Viewpage;
 use App\Livewire\Feedpage;
+use App\Livewire\SearchResults;
 use App\Livewire\PromptDetails;
 
 Route::get('/', function () {
     return redirect('/login');
 });
+
+/*
+    Contributor: Xander
+    These are the main routes of the web application
+*/
 
 // view routes
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -26,10 +33,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     Route::view('profile', 'profile')->name('profile');
 
-    // results route
-    Route::get('/search-prompts/results', [PromptController::class, 'searchByTitle'])->name('search.prompts.results');
+    Route::get('/search-results', SearchResults::class)->name('search.results');
 });
 
+/*
+    Contributor: Xander
+    These are updating routes for the Promptcontroller
+*/
 
 // update routes
 Route::middleware('auth')->group(function () {
@@ -43,6 +53,12 @@ Route::middleware('auth')->group(function () {
         Route::delete('/delete/{id}', [PromptController::class, 'destroy'])->name('prompt.destroy');   
     });
 });
+
+
+/*
+    Contributor: Stephan
+    These are test routes for the promptcontroller api testing
+*/
 
 // test routes
 Route::middleware('auth')->group(function () {
