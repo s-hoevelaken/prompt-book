@@ -1,5 +1,8 @@
 <?php
 
+/*
+    Contributor: Xander
+*/
 namespace App\Livewire;
 
 use App\Models\Prompt;

@@ -1,5 +1,8 @@
 <?php
 
+/*
+    Contributor: Xander
+*/
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
